@@ -17,7 +17,10 @@ export default function TestimonialsPage() {
       try {
         setLoading(true);
         const list = await db.getTestimonials();
-        setTestimonials(list);
+        const sorted = [...list].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setTestimonials(sorted);
       } catch (err) {
         console.error("Error loading testimonials:", err);
       } finally {

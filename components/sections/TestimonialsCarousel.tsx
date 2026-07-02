@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Testimonial } from "@/types";
 import TestimonialCard from "@/components/cards/TestimonialCard";
 import Typography from "@/components/ui/Typography";
+import { db } from "@/lib/db";
 
 const MOCK_TESTIMONIALS: Testimonial[] = [
   {
@@ -65,25 +66,66 @@ const MOCK_TESTIMONIALS: Testimonial[] = [
 ];
 
 export default function TestimonialsCarousel() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadTestimonials() {
+      try {
+        setLoading(true);
+        const list = await db.getTestimonials();
+        const sorted = [...list].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setTestimonials(sorted.length > 0 ? sorted : MOCK_TESTIMONIALS);
+      } catch (err) {
+        console.error("Error loading testimonials:", err);
+        setTestimonials(MOCK_TESTIMONIALS);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTestimonials();
+  }, []);
+
+  const items = testimonials.length > 0 ? testimonials : MOCK_TESTIMONIALS;
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? MOCK_TESTIMONIALS.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === MOCK_TESTIMONIALS.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
   };
 
-  // Get active items to show (show 3 on desktop, 1 on mobile)
   const getVisibleTestimonials = () => {
     const list = [];
-    for (let i = 0; i < 3; i++) {
-      const idx = (currentIndex + i) % MOCK_TESTIMONIALS.length;
-      list.push(MOCK_TESTIMONIALS[idx]);
+    if (items.length === 0) return [];
+    for (let i = 0; i < Math.min(3, items.length); i++) {
+      const idx = (currentIndex + i) % items.length;
+      list.push(items[idx]);
     }
     return list;
   };
+
+  if (loading && testimonials.length === 0) {
+    return (
+      <div className="w-full space-y-12">
+        <div className="flex items-end justify-between border-b border-luxury-border/20 pb-6">
+          <div className="space-y-3">
+            <div className="h-4 w-32 bg-luxury-border/20 rounded animate-pulse" />
+            <div className="h-8 w-64 bg-luxury-border/20 rounded animate-pulse mt-2" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="h-64 bg-luxury-dark/40 border border-luxury-border/20 rounded-2xl animate-pulse" />
+          <div className="h-64 bg-luxury-dark/40 border border-luxury-border/20 rounded-2xl animate-pulse hidden md:block" />
+          <div className="h-64 bg-luxury-dark/40 border border-luxury-border/20 rounded-2xl animate-pulse hidden md:block" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-12">
@@ -98,22 +140,24 @@ export default function TestimonialsCarousel() {
           </Typography>
         </div>
         
-        <div className="flex gap-3">
-          <button
-            onClick={handlePrev}
-            className="w-11 h-11 rounded-full border border-luxury-border/40 hover:border-luxury-gold/50 hover:bg-luxury-gold/5 flex items-center justify-center text-gray-400 hover:text-luxury-gold transition-all duration-300 cursor-pointer"
-            aria-label="Previous Testimonial"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="w-11 h-11 rounded-full border border-luxury-border/40 hover:border-luxury-gold/50 hover:bg-luxury-gold/5 flex items-center justify-center text-gray-400 hover:text-luxury-gold transition-all duration-300 cursor-pointer"
-            aria-label="Next Testimonial"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+        {items.length > 1 && (
+          <div className="flex gap-3">
+            <button
+              onClick={handlePrev}
+              className="w-11 h-11 rounded-full border border-luxury-border/40 hover:border-luxury-gold/50 hover:bg-luxury-gold/5 flex items-center justify-center text-gray-400 hover:text-luxury-gold transition-all duration-300 cursor-pointer"
+              aria-label="Previous Testimonial"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-11 h-11 rounded-full border border-luxury-border/40 hover:border-luxury-gold/50 hover:bg-luxury-gold/5 flex items-center justify-center text-gray-400 hover:text-luxury-gold transition-all duration-300 cursor-pointer"
+              aria-label="Next Testimonial"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Cards List Grid Slider Container */}
@@ -135,18 +179,20 @@ export default function TestimonialsCarousel() {
       </div>
 
       {/* Slider indicators */}
-      <div className="flex justify-center gap-2 pt-4">
-        {MOCK_TESTIMONIALS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentIndex(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-              currentIndex === i ? "w-6 bg-luxury-gold" : "w-1.5 bg-luxury-border/60"
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
-      </div>
+      {items.length > 1 && (
+        <div className="flex justify-center gap-2 pt-4">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentIndex(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                currentIndex === i ? "w-6 bg-luxury-gold" : "w-1.5 bg-luxury-border/60"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
