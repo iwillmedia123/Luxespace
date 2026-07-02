@@ -5250,6 +5250,37 @@ function mapLifestyleFromDB(l: any): LifestyleArticle {
   };
 }
 
+function mapLeadFromDB(l: any): Lead {
+  return {
+    id: fromUUID(l.id),
+    firstName: l.first_name,
+    lastName: l.last_name,
+    email: l.email,
+    phone: l.phone,
+    source: l.source,
+    status: l.status as any,
+    propertyInterestId: l.property_interest_id ? fromUUID(l.property_interest_id) : undefined,
+    notes: l.notes || undefined,
+    createdAt: l.created_at,
+    updatedAt: l.updated_at
+  };
+}
+
+function mapAppointmentFromDB(a: any): Appointment {
+  return {
+    id: fromUUID(a.id),
+    leadId: fromUUID(a.lead_id),
+    propertyId: a.property_id ? fromUUID(a.property_id) : undefined,
+    agentId: fromUUID(a.agent_id),
+    appointmentDate: a.appointment_date,
+    type: a.type as any,
+    status: a.status as any,
+    notes: a.notes || undefined,
+    createdAt: a.created_at,
+    updatedAt: a.updated_at
+  };
+}
+
 function mapPropertyToDB(p: any): any {
   return {
     id: toUUID(p.id),
@@ -6014,7 +6045,10 @@ export const db = {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
       const { data, error } = await supabase.from("leads").select("*");
-      if (!error && data) return data as Lead[];
+      if (!error && data) {
+        return (data as any[]).map(mapLeadFromDB);
+      }
+      if (error) console.error("Supabase getLeads error:", error.message);
     }
     return mockDB.get<Lead>("leads");
   },
@@ -6095,7 +6129,10 @@ export const db = {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
       const { data, error } = await supabase.from("appointments").select("*");
-      if (!error && data) return data as Appointment[];
+      if (!error && data) {
+        return (data as any[]).map(mapAppointmentFromDB);
+      }
+      if (error) console.error("Supabase getAppointments error:", error.message);
     }
     return mockDB.get<Appointment>("appointments");
   },

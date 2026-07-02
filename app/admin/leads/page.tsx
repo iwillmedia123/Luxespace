@@ -189,7 +189,7 @@ export default function LeadsCRMPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-luxury-border/20 text-gray-500 text-[9px] uppercase tracking-wider font-semibold bg-luxury-charcoal/20">
-                <th className="py-4 px-6">Client Profile</th>
+                <th className="py-4 px-6">Client Name & Message</th>
                 <th className="py-4 px-6">Contact Channels</th>
                 <th className="py-4 px-6">Property Interest</th>
                 <th className="py-4 px-6">Lead Date</th>
