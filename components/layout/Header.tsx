@@ -87,8 +87,8 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex items-center gap-7">
-            {NAV_LINKS.map((link) => {
+          <nav className="hidden lg:flex items-center lg:gap-3.5 xl:gap-5.5">
+            {NAV_LINKS.filter(link => link.href !== "/" && link.href !== "/wishlist").map((link) => {
               const isActive = pathname === link.href;
               return (
                 <div
@@ -105,7 +105,7 @@ export default function Header() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 pb-1.5 block relative group",
+                      "text-[9px] xl:text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 pb-1.5 block relative group",
                       isActive
                         ? "text-luxury-gold"
                         : "text-gray-300 hover:text-luxury-gold"
