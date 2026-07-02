@@ -5250,6 +5250,150 @@ function mapLifestyleFromDB(l: any): LifestyleArticle {
   };
 }
 
+function mapPropertyToDB(p: any): any {
+  return {
+    id: toUUID(p.id),
+    title: p.title,
+    slug: p.slug,
+    description: p.description,
+    price: p.price,
+    price_usd: p.priceUsd || null,
+    type: p.type,
+    status: p.status,
+    completion_status: p.completionStatus,
+    handover_date: p.handoverDate || null,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    area_sqft: p.areaSqft,
+    parking: p.parking || 0,
+    location: p.location,
+    community_id: toUUID(p.communityId),
+    developer_id: p.developerId ? toUUID(p.developerId) : null,
+    agent_id: toUUID(p.agentId),
+    latitude: p.latitude || null,
+    longitude: p.longitude || null,
+    images: p.images || [],
+    videos: p.videos || [],
+    amenities: p.amenities || [],
+    is_featured: p.isFeatured || false,
+    property_plan_url: p.propertyPlanUrl || null,
+    metadata: p.metadata || {},
+    created_at: p.createdAt,
+    updated_at: p.updatedAt
+  };
+}
+
+function mapDeveloperToDB(d: any): any {
+  return {
+    id: toUUID(d.id),
+    name: d.name,
+    slug: d.slug,
+    logo_url: d.logoUrl || null,
+    description: d.description || null,
+    founded_year: d.foundedYear || null,
+    website: d.website || null,
+    is_featured: d.isFeatured || false,
+    created_at: d.createdAt,
+    updated_at: d.updatedAt
+  };
+}
+
+function mapCommunityToDB(c: any): any {
+  return {
+    id: toUUID(c.id),
+    name: c.name,
+    slug: c.slug,
+    description: c.description || null,
+    banner_url: c.bannerUrl || null,
+    coordinates: c.coordinates || null,
+    is_featured: c.isFeatured || false,
+    created_at: c.createdAt,
+    updated_at: c.updatedAt
+  };
+}
+
+function mapAgentToDB(a: any): any {
+  return {
+    id: toUUID(a.id),
+    profile_id: a.profileId ? toUUID(a.profileId) : null,
+    name: a.name,
+    slug: a.slug,
+    title: a.title,
+    email: a.email,
+    phone: a.phone,
+    whatsapp: a.whatsapp || null,
+    avatar_url: a.avatarUrl || null,
+    languages: a.languages || [],
+    specialization: a.specialization || [],
+    experience_years: a.experienceYears || null,
+    bio: a.bio || null,
+    is_featured: a.isFeatured || false,
+    created_at: a.createdAt,
+    updated_at: a.updatedAt
+  };
+}
+
+function mapLeadToDB(l: any): any {
+  return {
+    id: toUUID(l.id),
+    first_name: l.firstName,
+    last_name: l.lastName,
+    email: l.email,
+    phone: l.phone,
+    source: l.source,
+    status: l.status,
+    property_interest_id: l.propertyInterestId ? toUUID(l.propertyInterestId) : null,
+    notes: l.notes || null,
+    created_at: l.createdAt,
+    updated_at: l.updatedAt
+  };
+}
+
+function mapAppointmentToDB(a: any): any {
+  return {
+    id: toUUID(a.id),
+    lead_id: toUUID(a.leadId),
+    property_id: a.propertyId ? toUUID(a.propertyId) : null,
+    agent_id: toUUID(a.agentId),
+    appointment_date: a.appointmentDate,
+    type: a.type,
+    status: a.status,
+    notes: a.notes || null,
+    created_at: a.createdAt,
+    updated_at: a.updatedAt
+  };
+}
+
+function mapTestimonialToDB(t: any): any {
+  return {
+    id: toUUID(t.id),
+    client_name: t.clientName,
+    client_title: t.clientTitle || null,
+    rating: t.rating,
+    content: t.content,
+    avatar_url: t.avatarUrl || null,
+    is_featured: t.isFeatured || false,
+    created_at: t.createdAt
+  };
+}
+
+function mapBlogToDB(b: any): any {
+  return {
+    id: toUUID(b.id),
+    title: b.title,
+    slug: b.slug,
+    summary: b.summary,
+    content: b.content,
+    cover_image: b.coverImage || null,
+    author_id: toUUID(b.authorId),
+    published_at: b.publishedAt || null,
+    is_published: b.isPublished || false,
+    tags: b.tags || [],
+    created_at: b.createdAt,
+    updated_at: b.updatedAt
+  };
+}
+
 // Dynamic Content Provider
 export const db = {
   // Properties CRUD
@@ -5361,7 +5505,20 @@ export const db = {
   },
 
   async createProperty(property: Omit<Property, "id" | "createdAt" | "updatedAt">): Promise<Property> {
-    const newRecord: Property = { ...property, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Property = { ...property, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapPropertyToDB(newRecord);
+      const { error } = await supabase.from("properties").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createProperty error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Property>("properties");
     list.unshift(newRecord);
     mockDB.save("properties", list);
@@ -5369,10 +5526,51 @@ export const db = {
   },
 
   async updateProperty(id: string, property: Partial<Property>): Promise<Property> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (property.title !== undefined) dbPatch.title = property.title;
+      if (property.slug !== undefined) dbPatch.slug = property.slug;
+      if (property.description !== undefined) dbPatch.description = property.description;
+      if (property.price !== undefined) dbPatch.price = property.price;
+      if (property.priceUsd !== undefined) dbPatch.price_usd = property.priceUsd;
+      if (property.type !== undefined) dbPatch.type = property.type;
+      if (property.status !== undefined) dbPatch.status = property.status;
+      if (property.completionStatus !== undefined) dbPatch.completion_status = property.completionStatus;
+      if (property.handoverDate !== undefined) dbPatch.handover_date = property.handoverDate;
+      if (property.bedrooms !== undefined) dbPatch.bedrooms = property.bedrooms;
+      if (property.bathrooms !== undefined) dbPatch.bathrooms = property.bathrooms;
+      if (property.areaSqft !== undefined) dbPatch.area_sqft = property.areaSqft;
+      if (property.parking !== undefined) dbPatch.parking = property.parking;
+      if (property.location !== undefined) dbPatch.location = property.location;
+      if (property.communityId !== undefined) dbPatch.community_id = toUUID(property.communityId);
+      if (property.developerId !== undefined) dbPatch.developer_id = property.developerId ? toUUID(property.developerId) : null;
+      if (property.agentId !== undefined) dbPatch.agent_id = toUUID(property.agentId);
+      if (property.latitude !== undefined) dbPatch.latitude = property.latitude;
+      if (property.longitude !== undefined) dbPatch.longitude = property.longitude;
+      if (property.images !== undefined) dbPatch.images = property.images;
+      if (property.videos !== undefined) dbPatch.videos = property.videos;
+      if (property.amenities !== undefined) dbPatch.amenities = property.amenities;
+      if (property.isFeatured !== undefined) dbPatch.is_featured = property.isFeatured;
+      if (property.propertyPlanUrl !== undefined) dbPatch.property_plan_url = property.propertyPlanUrl;
+      if (property.metadata !== undefined) dbPatch.metadata = property.metadata;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("properties").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateProperty error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapPropertyFromDB(data);
+    }
+    
     const list = mockDB.get<Property>("properties");
     const idx = list.findIndex((p) => p.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...property, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...property, updatedAt };
       mockDB.save("properties", list);
       return list[idx];
     }
@@ -5380,6 +5578,15 @@ export const db = {
   },
 
   async deleteProperty(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("properties").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteProperty error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Property>("properties");
     mockDB.save("properties", list.filter((p) => p.id !== id));
     return true;
@@ -5399,7 +5606,20 @@ export const db = {
   },
 
   async createDeveloper(developer: Omit<Developer, "id" | "createdAt" | "updatedAt">): Promise<Developer> {
-    const newRecord: Developer = { ...developer, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Developer = { ...developer, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapDeveloperToDB(newRecord);
+      const { error } = await supabase.from("developers").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createDeveloper error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Developer>("developers");
     list.unshift(newRecord);
     mockDB.save("developers", list);
@@ -5407,10 +5627,33 @@ export const db = {
   },
 
   async updateDeveloper(id: string, developer: Partial<Developer>): Promise<Developer> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (developer.name !== undefined) dbPatch.name = developer.name;
+      if (developer.slug !== undefined) dbPatch.slug = developer.slug;
+      if (developer.logoUrl !== undefined) dbPatch.logo_url = developer.logoUrl;
+      if (developer.description !== undefined) dbPatch.description = developer.description;
+      if (developer.foundedYear !== undefined) dbPatch.founded_year = developer.foundedYear;
+      if (developer.website !== undefined) dbPatch.website = developer.website;
+      if (developer.isFeatured !== undefined) dbPatch.is_featured = developer.isFeatured;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("developers").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateDeveloper error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapDeveloperFromDB(data);
+    }
+    
     const list = mockDB.get<Developer>("developers");
     const idx = list.findIndex((d) => d.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...developer, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...developer, updatedAt };
       mockDB.save("developers", list);
       return list[idx];
     }
@@ -5418,6 +5661,15 @@ export const db = {
   },
 
   async deleteDeveloper(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("developers").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteDeveloper error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Developer>("developers");
     mockDB.save("developers", list.filter((d) => d.id !== id));
     return true;
@@ -5437,7 +5689,20 @@ export const db = {
   },
 
   async createCommunity(community: Omit<Community, "id" | "createdAt" | "updatedAt">): Promise<Community> {
-    const newRecord: Community = { ...community, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Community = { ...community, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapCommunityToDB(newRecord);
+      const { error } = await supabase.from("communities").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createCommunity error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Community>("communities");
     list.unshift(newRecord);
     mockDB.save("communities", list);
@@ -5445,10 +5710,32 @@ export const db = {
   },
 
   async updateCommunity(id: string, community: Partial<Community>): Promise<Community> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (community.name !== undefined) dbPatch.name = community.name;
+      if (community.slug !== undefined) dbPatch.slug = community.slug;
+      if (community.description !== undefined) dbPatch.description = community.description;
+      if (community.bannerUrl !== undefined) dbPatch.banner_url = community.bannerUrl;
+      if (community.coordinates !== undefined) dbPatch.coordinates = community.coordinates;
+      if (community.isFeatured !== undefined) dbPatch.is_featured = community.isFeatured;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("communities").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateCommunity error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapCommunityFromDB(data);
+    }
+    
     const list = mockDB.get<Community>("communities");
     const idx = list.findIndex((c) => c.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...community, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...community, updatedAt };
       mockDB.save("communities", list);
       return list[idx];
     }
@@ -5456,6 +5743,15 @@ export const db = {
   },
 
   async deleteCommunity(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("communities").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteCommunity error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Community>("communities");
     mockDB.save("communities", list.filter((c) => c.id !== id));
     return true;
@@ -5475,7 +5771,20 @@ export const db = {
   },
 
   async createAgent(agent: Omit<Agent, "id" | "createdAt" | "updatedAt">): Promise<Agent> {
-    const newRecord: Agent = { ...agent, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Agent = { ...agent, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapAgentToDB(newRecord);
+      const { error } = await supabase.from("agents").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createAgent error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Agent>("agents");
     list.unshift(newRecord);
     mockDB.save("agents", list);
@@ -5483,10 +5792,38 @@ export const db = {
   },
 
   async updateAgent(id: string, agent: Partial<Agent>): Promise<Agent> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (agent.name !== undefined) dbPatch.name = agent.name;
+      if (agent.slug !== undefined) dbPatch.slug = agent.slug;
+      if (agent.title !== undefined) dbPatch.title = agent.title;
+      if (agent.email !== undefined) dbPatch.email = agent.email;
+      if (agent.phone !== undefined) dbPatch.phone = agent.phone;
+      if (agent.whatsapp !== undefined) dbPatch.whatsapp = agent.whatsapp;
+      if (agent.avatarUrl !== undefined) dbPatch.avatar_url = agent.avatarUrl;
+      if (agent.languages !== undefined) dbPatch.languages = agent.languages;
+      if (agent.specialization !== undefined) dbPatch.specialization = agent.specialization;
+      if (agent.experienceYears !== undefined) dbPatch.experience_years = agent.experienceYears;
+      if (agent.bio !== undefined) dbPatch.bio = agent.bio;
+      if (agent.isFeatured !== undefined) dbPatch.is_featured = agent.isFeatured;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("agents").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateAgent error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapAgentFromDB(data);
+    }
+    
     const list = mockDB.get<Agent>("agents");
     const idx = list.findIndex((a) => a.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...agent, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...agent, updatedAt };
       mockDB.save("agents", list);
       return list[idx];
     }
@@ -5494,6 +5831,15 @@ export const db = {
   },
 
   async deleteAgent(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("agents").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteAgent error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Agent>("agents");
     mockDB.save("agents", list.filter((a) => a.id !== id));
     return true;
@@ -5513,7 +5859,20 @@ export const db = {
   },
 
   async createBlog(blog: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {
-    const newRecord: BlogPost = { ...blog, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: BlogPost = { ...blog, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapBlogToDB(newRecord);
+      const { error } = await supabase.from("blogs").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createBlog error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<BlogPost>("blogs");
     list.unshift(newRecord);
     mockDB.save("blogs", list);
@@ -5521,10 +5880,35 @@ export const db = {
   },
 
   async updateBlog(id: string, blog: Partial<BlogPost>): Promise<BlogPost> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (blog.title !== undefined) dbPatch.title = blog.title;
+      if (blog.slug !== undefined) dbPatch.slug = blog.slug;
+      if (blog.summary !== undefined) dbPatch.summary = blog.summary;
+      if (blog.content !== undefined) dbPatch.content = blog.content;
+      if (blog.coverImage !== undefined) dbPatch.cover_image = blog.coverImage;
+      if (blog.authorId !== undefined) dbPatch.author_id = toUUID(blog.authorId);
+      if (blog.publishedAt !== undefined) dbPatch.published_at = blog.publishedAt;
+      if (blog.isPublished !== undefined) dbPatch.is_published = blog.isPublished;
+      if (blog.tags !== undefined) dbPatch.tags = blog.tags;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("blogs").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateBlog error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapBlogFromDB(data);
+    }
+    
     const list = mockDB.get<BlogPost>("blogs");
     const idx = list.findIndex((b) => b.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...blog, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...blog, updatedAt };
       mockDB.save("blogs", list);
       return list[idx];
     }
@@ -5532,6 +5916,15 @@ export const db = {
   },
 
   async deleteBlog(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("blogs").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteBlog error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<BlogPost>("blogs");
     mockDB.save("blogs", list.filter((b) => b.id !== id));
     return true;
@@ -5551,7 +5944,20 @@ export const db = {
   },
 
   async createTestimonial(testimonial: Omit<Testimonial, "id" | "createdAt">): Promise<Testimonial> {
-    const newRecord: Testimonial = { ...testimonial, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Testimonial = { ...testimonial, id, createdAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapTestimonialToDB(newRecord);
+      const { error } = await supabase.from("testimonials").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createTestimonial error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Testimonial>("testimonials");
     list.unshift(newRecord);
     mockDB.save("testimonials", list);
@@ -5559,6 +5965,25 @@ export const db = {
   },
 
   async updateTestimonial(id: string, testimonial: Partial<Testimonial>): Promise<Testimonial> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (testimonial.clientName !== undefined) dbPatch.client_name = testimonial.clientName;
+      if (testimonial.clientTitle !== undefined) dbPatch.client_title = testimonial.clientTitle;
+      if (testimonial.rating !== undefined) dbPatch.rating = testimonial.rating;
+      if (testimonial.content !== undefined) dbPatch.content = testimonial.content;
+      if (testimonial.avatarUrl !== undefined) dbPatch.avatar_url = testimonial.avatarUrl;
+      if (testimonial.isFeatured !== undefined) dbPatch.is_featured = testimonial.isFeatured;
+      
+      const { error, data } = await supabase.from("testimonials").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateTestimonial error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapTestimonialFromDB(data);
+    }
+    
     const list = mockDB.get<Testimonial>("testimonials");
     const idx = list.findIndex((t) => t.id === id);
     if (idx !== -1) {
@@ -5570,6 +5995,15 @@ export const db = {
   },
 
   async deleteTestimonial(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("testimonials").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteTestimonial error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Testimonial>("testimonials");
     mockDB.save("testimonials", list.filter((t) => t.id !== id));
     return true;
@@ -5586,7 +6020,20 @@ export const db = {
   },
 
   async createLead(lead: Omit<Lead, "id" | "createdAt" | "updatedAt">): Promise<Lead> {
-    const newRecord: Lead = { ...lead, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Lead = { ...lead, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapLeadToDB(newRecord);
+      const { error } = await supabase.from("leads").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createLead error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Lead>("leads");
     list.unshift(newRecord);
     mockDB.save("leads", list);
@@ -5594,10 +6041,34 @@ export const db = {
   },
 
   async updateLead(id: string, lead: Partial<Lead>): Promise<Lead> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (lead.firstName !== undefined) dbPatch.first_name = lead.firstName;
+      if (lead.lastName !== undefined) dbPatch.last_name = lead.lastName;
+      if (lead.email !== undefined) dbPatch.email = lead.email;
+      if (lead.phone !== undefined) dbPatch.phone = lead.phone;
+      if (lead.source !== undefined) dbPatch.source = lead.source;
+      if (lead.status !== undefined) dbPatch.status = lead.status;
+      if (lead.propertyInterestId !== undefined) dbPatch.property_interest_id = lead.propertyInterestId ? toUUID(lead.propertyInterestId) : null;
+      if (lead.notes !== undefined) dbPatch.notes = lead.notes;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("leads").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateLead error:", error.message);
+        throw new Error(error.message);
+      }
+      return data as Lead;
+    }
+    
     const list = mockDB.get<Lead>("leads");
     const idx = list.findIndex((l) => l.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...lead, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...lead, updatedAt };
       mockDB.save("leads", list);
       return list[idx];
     }
@@ -5605,6 +6076,15 @@ export const db = {
   },
 
   async deleteLead(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("leads").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteLead error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Lead>("leads");
     mockDB.save("leads", list.filter((l) => l.id !== id));
     return true;
@@ -5621,7 +6101,20 @@ export const db = {
   },
 
   async createAppointment(appointment: Omit<Appointment, "id" | "createdAt" | "updatedAt">): Promise<Appointment> {
-    const newRecord: Appointment = { ...appointment, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const id = crypto.randomUUID();
+    const newRecord: Appointment = { ...appointment, id, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapAppointmentToDB(newRecord);
+      const { error } = await supabase.from("appointments").insert(dbRecord);
+      if (error) {
+        console.error("Supabase createAppointment error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    
     const list = mockDB.get<Appointment>("appointments");
     list.unshift(newRecord);
     mockDB.save("appointments", list);
@@ -5629,10 +6122,33 @@ export const db = {
   },
 
   async updateAppointment(id: string, appointment: Partial<Appointment>): Promise<Appointment> {
+    const updatedAt = new Date().toISOString();
+    
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (appointment.leadId !== undefined) dbPatch.lead_id = toUUID(appointment.leadId);
+      if (appointment.propertyId !== undefined) dbPatch.property_id = appointment.propertyId ? toUUID(appointment.propertyId) : null;
+      if (appointment.agentId !== undefined) dbPatch.agent_id = toUUID(appointment.agentId);
+      if (appointment.appointmentDate !== undefined) dbPatch.appointment_date = appointment.appointmentDate;
+      if (appointment.type !== undefined) dbPatch.type = appointment.type;
+      if (appointment.status !== undefined) dbPatch.status = appointment.status;
+      if (appointment.notes !== undefined) dbPatch.notes = appointment.notes;
+      dbPatch.updated_at = updatedAt;
+      
+      const { error, data } = await supabase.from("appointments").update(dbPatch).eq("id", dbId).select().single();
+      if (error) {
+        console.error("Supabase updateAppointment error:", error.message);
+        throw new Error(error.message);
+      }
+      return data as Appointment;
+    }
+    
     const list = mockDB.get<Appointment>("appointments");
     const idx = list.findIndex((a) => a.id === id);
     if (idx !== -1) {
-      list[idx] = { ...list[idx], ...appointment, updatedAt: new Date().toISOString() };
+      list[idx] = { ...list[idx], ...appointment, updatedAt };
       mockDB.save("appointments", list);
       return list[idx];
     }
@@ -5640,6 +6156,15 @@ export const db = {
   },
 
   async deleteAppointment(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("appointments").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteAppointment error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
     const list = mockDB.get<Appointment>("appointments");
     mockDB.save("appointments", list.filter((a) => a.id !== id));
     return true;
