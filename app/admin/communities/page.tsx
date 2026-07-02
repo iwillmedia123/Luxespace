@@ -21,6 +21,9 @@ export default function CommunitiesManagerPage() {
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [bannerUrl, setBannerUrl] = useState("");
+  const [lat, setLat] = useState<string | number>("");
+  const [lng, setLng] = useState<string | number>("");
 
   useEffect(() => {
     async function loadData() {
@@ -47,6 +50,9 @@ export default function CommunitiesManagerPage() {
     setSlug("");
     setDescription("");
     setIsFeatured(false);
+    setBannerUrl("");
+    setLat("");
+    setLng("");
     setIsDrawerOpen(true);
   };
 
@@ -56,6 +62,9 @@ export default function CommunitiesManagerPage() {
     setSlug(comm.slug);
     setDescription(comm.description || "");
     setIsFeatured(comm.isFeatured);
+    setBannerUrl(comm.bannerUrl || "");
+    setLat(comm.coordinates?.lat !== undefined ? comm.coordinates.lat : "");
+    setLng(comm.coordinates?.lng !== undefined ? comm.coordinates.lng : "");
     setIsDrawerOpen(true);
   };
 
@@ -68,7 +77,8 @@ export default function CommunitiesManagerPage() {
       slug,
       description,
       isFeatured,
-      bannerUrl: "/assets/palm_jumeirah_render.png",
+      bannerUrl: bannerUrl || "/assets/palm_jumeirah_render.png",
+      coordinates: (lat !== "" && lng !== "") ? { lat: Number(lat), lng: Number(lng) } : undefined,
     };
 
     try {
@@ -256,6 +266,51 @@ export default function CommunitiesManagerPage() {
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none resize-none"
                   />
+                </div>
+
+                {/* Banner URL */}
+                <div className="space-y-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
+                    Banner Image URL
+                  </label>
+                  <input
+                    type="text"
+                    value={bannerUrl}
+                    onChange={(e) => setBannerUrl(e.target.value)}
+                    placeholder="/assets/palm_jumeirah_render.png"
+                    className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
+                  />
+                </div>
+
+                {/* Coordinates Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
+                      GPS Latitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={lat}
+                      onChange={(e) => setLat(e.target.value)}
+                      placeholder="e.g. 25.1124"
+                      className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
+                      GPS Longitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={lng}
+                      onChange={(e) => setLng(e.target.value)}
+                      placeholder="e.g. 55.1390"
+                      className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
+                    />
+                  </div>
                 </div>
 
                 {/* Feature Status */}
