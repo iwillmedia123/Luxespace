@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { db } from "@/lib/db";
+import { Community } from "@/types";
 import Typography from "@/components/ui/Typography";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
@@ -10,21 +13,17 @@ import AnimateIn from "@/components/motion/AnimateIn";
 const PURPOSE_OPTIONS = [
   { value: "buy", label: "Buy Property" },
   { value: "rent", label: "Rent Property" },
-];
-
-const COMMUNITY_OPTIONS = [
-  { value: "", label: "Select Location" },
-  { value: "palm-jumeirah", label: "Palm Jumeirah" },
-  { value: "downtown-dubai", label: "Downtown Dubai" },
-  { value: "dubai-hills", label: "Dubai Hills Estate" },
-  { value: "emirates-hills", label: "Emirates Hills" },
+  { value: "off-plan", label: "Off Plan" },
 ];
 
 const TYPE_OPTIONS = [
   { value: "", label: "Select Property Type" },
   { value: "villa", label: "Luxury Villa" },
-  { value: "penthouse", label: "Signature Penthouse" },
   { value: "apartment", label: "Premium Apartment" },
+  { value: "penthouse", label: "Signature Penthouse" },
+  { value: "townhouse", label: "Elegant Townhouse" },
+  { value: "mansion", label: "Royal Mansion" },
+  { value: "duplex", label: "Modern Duplex" },
 ];
 
 const PRICE_OPTIONS = [
@@ -36,15 +35,40 @@ const PRICE_OPTIONS = [
 ];
 
 export default function PropertySearch() {
+  const router = useRouter();
   const [purpose, setPurpose] = useState("buy");
   const [community, setCommunity] = useState("");
   const [type, setType] = useState("");
   const [price, setPrice] = useState("");
+  const [communities, setCommunities] = useState<Community[]>([]);
+
+  useEffect(() => {
+    async function loadCommunities() {
+      try {
+        const comms = await db.getCommunities();
+        setCommunities(comms);
+      } catch (err) {
+        console.error("Error loading communities in search:", err);
+      }
+    }
+    loadCommunities();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching properties:", { purpose, community, type, price });
+    const params = new URLSearchParams();
+    if (purpose) params.set("purpose", purpose);
+    if (community) params.set("community", community);
+    if (type) params.set("type", type);
+    if (price) params.set("price", price);
+
+    router.push(`/properties?${params.toString()}`);
   };
+
+  const communityOptions = [
+    { value: "", label: "Select Location" },
+    ...communities.map((c) => ({ value: c.id, label: c.name })),
+  ];
 
   return (
     <section
@@ -86,7 +110,7 @@ export default function PropertySearch() {
                   label="Community"
                   value={community}
                   onChange={(e) => setCommunity(e.target.value)}
-                  options={COMMUNITY_OPTIONS}
+                  options={communityOptions}
                 />
               </div>
 

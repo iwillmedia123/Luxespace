@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search, Grid, List, SlidersHorizontal, ChevronLeft, ChevronRight, Inbox } from "lucide-react";
 import { Property, Community, Developer } from "@/types";
 import { db } from "@/lib/db";
@@ -17,7 +18,7 @@ interface PropertyListingPageProps {
   heroSubtitle: string;
 }
 
-export default function PropertyListingPage({
+function PropertyListingPageContent({
   defaultPurpose,
   heroTitle,
   heroSubtitle,
@@ -34,6 +35,38 @@ export default function PropertyListingPage({
   const [activeFilters, setActiveFilters] = useState<Record<string, string | number | boolean | undefined>>({
     purpose: defaultPurpose || undefined,
   });
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const purposeParam = searchParams.get("purpose");
+    const communityParam = searchParams.get("community");
+    const typeParam = searchParams.get("type");
+    const priceParam = searchParams.get("price");
+
+    const newFilters: Record<string, string | number | boolean | undefined> = {
+      purpose: defaultPurpose || purposeParam || undefined,
+      community: communityParam || undefined,
+      type: typeParam || undefined,
+    };
+
+    if (priceParam) {
+      if (priceParam === "0-5m") {
+        newFilters.minPrice = 0;
+        newFilters.maxPrice = 5000000;
+      } else if (priceParam === "5m-15m") {
+        newFilters.minPrice = 5000000;
+        newFilters.maxPrice = 15000000;
+      } else if (priceParam === "15m-30m") {
+        newFilters.minPrice = 15000000;
+        newFilters.maxPrice = 30000000;
+      } else if (priceParam === "30m+") {
+        newFilters.minPrice = 30000000;
+      }
+    }
+
+    setActiveFilters(newFilters);
+  }, [searchParams, defaultPurpose]);
 
   // Mobile Filters Overlay
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -299,5 +332,17 @@ export default function PropertyListingPage({
         </div>
       )}
     </div>
+  );
+}
+
+export default function PropertyListingPage(props: PropertyListingPageProps) {
+  return (
+    <Suspense fallback={
+      <div className="bg-luxury-charcoal min-h-screen text-white pt-24 sm:pt-32 pb-24 flex items-center justify-center">
+        <div className="text-luxury-gold animate-pulse text-sm uppercase tracking-widest font-semibold">Loading Portfolio...</div>
+      </div>
+    }>
+      <PropertyListingPageContent {...props} />
+    </Suspense>
   );
 }
