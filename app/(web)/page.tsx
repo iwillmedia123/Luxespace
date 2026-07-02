@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { db } from "@/lib/db";
 import { Shield, Key, Landmark, BadgeCheck, Compass, HelpCircle } from "lucide-react";
 import { Property, Community, BlogPost } from "@/types";
 import HeroScroll from "@/components/layout/HeroScroll";
@@ -336,7 +337,34 @@ const MOCK_BLOGS: BlogPost[] = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  let propertiesToShow = MOCK_PROPERTIES;
+  let communitiesToShow = MOCK_COMMUNITIES;
+  let blogsToShow = MOCK_BLOGS;
+
+  try {
+    const [dbProperties, dbCommunities, dbBlogs] = await Promise.all([
+      db.getPropertiesByFilters({ isFeatured: true }),
+      db.getCommunities(),
+      db.getBlogs(),
+    ]);
+
+    if (dbProperties && dbProperties.length > 0) {
+      propertiesToShow = dbProperties.slice(0, 4);
+    }
+    
+    const featuredComms = dbCommunities ? dbCommunities.filter((c) => c.isFeatured) : [];
+    if (featuredComms.length > 0) {
+      communitiesToShow = featuredComms.slice(0, 4);
+    }
+
+    if (dbBlogs && dbBlogs.length > 0) {
+      blogsToShow = dbBlogs.slice(0, 4);
+    }
+  } catch (err) {
+    console.error("Error loading homepage dynamic data:", err);
+  }
+
   return (
     <div className="w-full bg-luxury-charcoal">
       {/* Cinematic Apple-style Scroll Hero Section */}
@@ -364,7 +392,7 @@ export default function HomePage() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {MOCK_PROPERTIES.map((property) => (
+          {propertiesToShow.map((property) => (
             <AnimateIn key={property.id} preset="fade-up" duration={0.85}>
               <PropertyCard property={property} />
             </AnimateIn>
@@ -394,7 +422,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {MOCK_COMMUNITIES.map((community, i) => (
+          {communitiesToShow.map((community, i) => (
             <AnimateIn key={community.id} preset="zoom-reveal" delay={i * 0.05} duration={0.9}>
               <CommunityCard community={community} propertiesCount={10 + i * 4} />
             </AnimateIn>
@@ -539,7 +567,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {MOCK_BLOGS.map((post) => (
+          {blogsToShow.map((post) => (
             <AnimateIn key={post.id} preset="fade-up" duration={0.85}>
               <BlogCard post={post} />
             </AnimateIn>
