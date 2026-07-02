@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -114,7 +116,10 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
 
   const roi = getCommunityROI(community.name);
   const avgPrice = getAveragePrice();
-  const amenitiesList = getNearbyAmenities(community.name);
+  const locationText = (community.coordinates as any)?.locationText || "Freehold Zone, Dubai, UAE";
+  const amenitiesList = (community.coordinates as any)?.neighborhoodAmenities && (community.coordinates as any).neighborhoodAmenities.length > 0
+    ? (community.coordinates as any).neighborhoodAmenities
+    : getNearbyAmenities(community.name);
 
   return (
     <main className="min-h-screen bg-[#1f232c] pt-28 pb-20 px-4 relative overflow-hidden">
@@ -234,7 +239,8 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
                     latitude={community.coordinates?.lat || 25.1124}
                     longitude={community.coordinates?.lng || 55.1390}
                     title={community.name}
-                    location="Freehold Zone, Dubai, UAE"
+                    location={locationText}
+                    concentricDistances={(community.coordinates as any)?.concentricDistances}
                   />
                 </div>
               </div>
@@ -248,7 +254,7 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {amenitiesList.map((item, idx) => (
+                  {amenitiesList.map((item: any, idx: number) => (
                     <div key={idx} className="bg-luxury-charcoal/50 border border-luxury-border/20 rounded-xl p-4 flex gap-3.5 items-center">
                       <div className="w-9 h-9 rounded-lg bg-luxury-gold/5 border border-luxury-gold/25 flex items-center justify-center p-1">
                         <CheckCircle2 className="w-4 h-4 text-luxury-gold" />
