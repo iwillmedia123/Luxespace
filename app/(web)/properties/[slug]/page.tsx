@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -353,6 +355,7 @@ export default function PropertyDetailPage() {
                 longitude={property.longitude}
                 title={property.title}
                 location={property.location}
+                concentricDistances={(property.community?.coordinates as any)?.concentricDistances}
               />
             )}
 

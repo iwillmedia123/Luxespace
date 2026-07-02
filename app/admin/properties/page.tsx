@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from "react";
 import {
   Plus,
@@ -107,17 +109,46 @@ export default function PropertiesManagerPage() {
     setBedrooms(2);
     setBathrooms(2);
     setAreaSqft(1200);
-    setLocation("Dubai Marina, Dubai");
-    if (communities.length > 0) setCommunityId(communities[0].id);
-    if (developers.length > 0) setDeveloperId(developers[0].id);
-    if (agents.length > 0) setAgentId(agents[0].id);
     setIsFeatured(false);
     setAmenitiesText("Infinity Pool, Gym, Concierge, Security");
-    setLatitude(25.2048);
-    setLongitude(55.2708);
+    
+    if (communities.length > 0) {
+      const defaultComm = communities[0];
+      setCommunityId(defaultComm.id);
+      const coordsObj = (defaultComm.coordinates as any) || {};
+      if (coordsObj.lat && coordsObj.lng) {
+        setLatitude(coordsObj.lat);
+        setLongitude(coordsObj.lng);
+      } else {
+        setLatitude(25.2048);
+        setLongitude(55.2708);
+      }
+      setLocation(coordsObj.locationText || `${defaultComm.name}, Dubai, UAE`);
+    } else {
+      setCommunityId("");
+      setLatitude(25.2048);
+      setLongitude(55.2708);
+      setLocation("Dubai Marina, Dubai");
+    }
+
+    if (developers.length > 0) setDeveloperId(developers[0].id);
+    if (agents.length > 0) setAgentId(agents[0].id);
     setImages(["/assets/apartment_render.png"]);
     setPropertyPlanUrl("");
     setIsDrawerOpen(true);
+  };
+
+  const handleCommunityChange = (id: string) => {
+    setCommunityId(id);
+    const selectedComm = communities.find((c) => c.id === id);
+    if (selectedComm) {
+      const coordsObj = (selectedComm.coordinates as any) || {};
+      if (coordsObj.lat && coordsObj.lng) {
+        setLatitude(coordsObj.lat);
+        setLongitude(coordsObj.lng);
+      }
+      setLocation(coordsObj.locationText || `${selectedComm.name}, Dubai, UAE`);
+    }
   };
 
   const handleOpenEdit = (prop: Property) => {
@@ -671,7 +702,7 @@ export default function PropertiesManagerPage() {
                   </label>
                   <select
                     value={communityId}
-                    onChange={(e) => setCommunityId(e.target.value)}
+                    onChange={(e) => handleCommunityChange(e.target.value)}
                     className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none cursor-pointer"
                   >
                     {communities.map((c) => (
