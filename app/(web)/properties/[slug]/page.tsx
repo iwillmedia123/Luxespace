@@ -349,15 +349,21 @@ export default function PropertyDetailPage() {
             </div>
 
             {/* Map Neighborhood */}
-            {property.latitude && property.longitude && (
-              <PropertyMap
-                latitude={property.latitude}
-                longitude={property.longitude}
-                title={property.title}
-                location={property.location}
-                concentricDistances={(property.community?.coordinates as any)?.concentricDistances}
-              />
-            )}
+            {(() => {
+              const lat = property.latitude || (property.community?.coordinates as any)?.lat || 25.1124;
+              const lng = property.longitude || (property.community?.coordinates as any)?.lng || 55.1390;
+              const mapLocationText = (property.community?.coordinates as any)?.locationText || property.location || property.community?.name || "Dubai, UAE";
+              
+              return (
+                <PropertyMap
+                  latitude={lat}
+                  longitude={lng}
+                  title={property.title}
+                  location={mapLocationText}
+                  concentricDistances={(property.community?.coordinates as any)?.concentricDistances}
+                />
+              );
+            })()}
 
             {/* Mortgage Calculator */}
             <MortgageCalculator propertyPrice={property.price} />
