@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from "react";
 import { Plus, Search, Trash2, Edit, X, Upload } from "lucide-react";
 import { db } from "@/lib/db";
@@ -57,6 +59,16 @@ export default function CommunitiesManagerPage() {
   const [lat, setLat] = useState<number | "">("");
   const [lng, setLng] = useState<number | "">("");
   const [isDragging, setIsDragging] = useState(false);
+
+  // New location/distance/amenities states
+  const [locationText, setLocationText] = useState("");
+  const [concentricDistances, setConcentricDistances] = useState<Array<{ name: string; distance: string }>>([]);
+  const [newDistanceName, setNewDistanceName] = useState("");
+  const [newDistanceValue, setNewDistanceValue] = useState("");
+
+  const [neighborhoodAmenities, setNeighborhoodAmenities] = useState<Array<{ name: string; value: string }>>([]);
+  const [newAmenityName, setNewAmenityName] = useState("");
+  const [newAmenityValue, setNewAmenityValue] = useState("");
 
   useEffect(() => {
     async function loadData() {
@@ -134,6 +146,28 @@ export default function CommunitiesManagerPage() {
     }
   };
 
+  const addDistance = () => {
+    if (!newDistanceName || !newDistanceValue) return;
+    setConcentricDistances([...concentricDistances, { name: newDistanceName, distance: newDistanceValue }]);
+    setNewDistanceName("");
+    setNewDistanceValue("");
+  };
+
+  const removeDistance = (index: number) => {
+    setConcentricDistances(concentricDistances.filter((_, i) => i !== index));
+  };
+
+  const addAmenity = () => {
+    if (!newAmenityName || !newAmenityValue) return;
+    setNeighborhoodAmenities([...neighborhoodAmenities, { name: newAmenityName, value: newAmenityValue }]);
+    setNewAmenityName("");
+    setNewAmenityValue("");
+  };
+
+  const removeAmenity = (index: number) => {
+    setNeighborhoodAmenities(neighborhoodAmenities.filter((_, i) => i !== index));
+  };
+
   const handleOpenAdd = () => {
     setEditingCommunity(null);
     setName("");
@@ -144,6 +178,13 @@ export default function CommunitiesManagerPage() {
     setMapInput("");
     setLat("");
     setLng("");
+    setLocationText("");
+    setConcentricDistances([]);
+    setNewDistanceName("");
+    setNewDistanceValue("");
+    setNeighborhoodAmenities([]);
+    setNewAmenityName("");
+    setNewAmenityValue("");
     setIsDrawerOpen(true);
   };
 
@@ -155,10 +196,16 @@ export default function CommunitiesManagerPage() {
     setIsFeatured(comm.isFeatured);
     setBannerUrl(comm.bannerUrl || "");
     
-    if (comm.coordinates?.lat !== undefined && comm.coordinates?.lng !== undefined) {
-      setLat(comm.coordinates.lat);
-      setLng(comm.coordinates.lng);
-      setMapInput(`https://www.google.com/maps?q=${comm.coordinates.lat},${comm.coordinates.lng}`);
+    // Parse coordinates and load location fields
+    const coordsObj: any = comm.coordinates || {};
+    setLocationText(coordsObj.locationText || "");
+    setConcentricDistances(coordsObj.concentricDistances || []);
+    setNeighborhoodAmenities(coordsObj.neighborhoodAmenities || []);
+
+    if (coordsObj.lat !== undefined && coordsObj.lng !== undefined) {
+      setLat(coordsObj.lat);
+      setLng(coordsObj.lng);
+      setMapInput(`https://www.google.com/maps?q=${coordsObj.lat},${coordsObj.lng}`);
     } else {
       setLat("");
       setLng("");
@@ -177,7 +224,13 @@ export default function CommunitiesManagerPage() {
       description,
       isFeatured,
       bannerUrl: bannerUrl || "/assets/palm_jumeirah_render.png",
-      coordinates: (lat !== "" && lng !== "") ? { lat: Number(lat), lng: Number(lng) } : undefined,
+      coordinates: {
+        lat: lat !== "" ? Number(lat) : 25.1124,
+        lng: lng !== "" ? Number(lng) : 55.1390,
+        locationText: locationText || undefined,
+        concentricDistances: concentricDistances.length > 0 ? concentricDistances : undefined,
+        neighborhoodAmenities: neighborhoodAmenities.length > 0 ? neighborhoodAmenities : undefined,
+      } as any,
     };
 
     try {
@@ -456,6 +509,124 @@ export default function CommunitiesManagerPage() {
                       )}
                     </p>
                   ) : null}
+                </div>
+
+                {/* Location Address Text */}
+                <div className="space-y-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
+                    Location Address
+                  </label>
+                  <input
+                    type="text"
+                    value={locationText}
+                    onChange={(e) => setLocationText(e.target.value)}
+                    placeholder="e.g. Freehold Zone, Dubai, UAE"
+                    className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none placeholder-gray-600 transition-colors"
+                  />
+                </div>
+
+                {/* Concentric Distances Section */}
+                <div className="space-y-3 pt-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold block">
+                    Concentric Distances
+                  </label>
+                  
+                  {concentricDistances.length > 0 && (
+                    <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
+                      {concentricDistances.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between bg-luxury-charcoal/50 border border-luxury-border/20 rounded-xl px-3 py-2 text-xs">
+                          <div className="min-w-0">
+                            <span className="text-white block font-medium truncate text-xs">{item.name}</span>
+                            <span className="text-[9px] text-gray-400 block">{item.distance}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeDistance(idx)}
+                            className="text-red-400 hover:text-red-300 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. Nearest Metro"
+                      value={newDistanceName}
+                      onChange={(e) => setNewDistanceName(e.target.value)}
+                      className="bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none placeholder-gray-600"
+                    />
+                    <input
+                      type="text"
+                      placeholder="e.g. 5 mins drive"
+                      value={newDistanceValue}
+                      onChange={(e) => setNewDistanceValue(e.target.value)}
+                      className="bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none placeholder-gray-600"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addDistance}
+                    className="w-full text-[10px] py-2 border-luxury-border/30 hover:border-luxury-gold hover:text-luxury-gold"
+                  >
+                    + Add Distance Item
+                  </Button>
+                </div>
+
+                {/* Neighborhood Amenities Section */}
+                <div className="space-y-3 pt-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold block">
+                    Neighborhood Amenities (Infrastructure)
+                  </label>
+                  
+                  {neighborhoodAmenities.length > 0 && (
+                    <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
+                      {neighborhoodAmenities.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between bg-luxury-charcoal/50 border border-luxury-border/20 rounded-xl px-3 py-2 text-xs">
+                          <div className="min-w-0">
+                            <span className="text-white block font-medium truncate text-xs">{item.name}</span>
+                            <span className="text-[9px] text-gray-400 block">{item.value}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeAmenity(idx)}
+                            className="text-red-400 hover:text-red-300 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. Premium Gym"
+                      value={newAmenityName}
+                      onChange={(e) => setNewAmenityName(e.target.value)}
+                      className="bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none placeholder-gray-600"
+                    />
+                    <input
+                      type="text"
+                      placeholder="e.g. State of the art"
+                      value={newAmenityValue}
+                      onChange={(e) => setNewAmenityValue(e.target.value)}
+                      className="bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none placeholder-gray-600"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addAmenity}
+                    className="w-full text-[10px] py-2 border-luxury-border/30 hover:border-luxury-gold hover:text-luxury-gold"
+                  >
+                    + Add Amenity Item
+                  </Button>
                 </div>
 
                 {/* Feature Status */}
