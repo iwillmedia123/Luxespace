@@ -1,11 +1,42 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Search, Trash2, Edit, X } from "lucide-react";
+import { Plus, Search, Trash2, Edit, X, Upload } from "lucide-react";
 import { db } from "@/lib/db";
 import { Community } from "@/types";
 import Typography from "@/components/ui/Typography";
 import Button from "@/components/ui/Button";
+
+function extractCoordinatesFromGoogleMapsLink(link: string): { lat: number; lng: number } | null {
+  try {
+    const decoded = decodeURIComponent(link);
+    
+    // 1. Check for @lat,lng pattern (e.g. /@25.1124,55.1390)
+    const atMatch = decoded.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (atMatch) {
+      return { lat: parseFloat(atMatch[1]), lng: parseFloat(atMatch[2]) };
+    }
+    
+    // 2. Check for q=lat,lng pattern (e.g. ?q=25.1124,55.1390 or &q=25.1124,55.1390)
+    const qMatch = decoded.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (qMatch) {
+      return { lat: parseFloat(qMatch[1]), lng: parseFloat(qMatch[2]) };
+    }
+
+    // 3. Check for general lat/lng numbers separated by comma
+    const llMatch = decoded.match(/(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (llMatch) {
+      const lat = parseFloat(llMatch[1]);
+      const lng = parseFloat(llMatch[2]);
+      if (Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+        return { lat, lng };
+      }
+    }
+  } catch (e) {
+    console.error("Error parsing maps link:", e);
+  }
+  return null;
+}
 
 export default function CommunitiesManagerPage() {
   const [communities, setCommunities] = useState<Community[]>([]);
@@ -22,8 +53,10 @@ export default function CommunitiesManagerPage() {
   const [description, setDescription] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [bannerUrl, setBannerUrl] = useState("");
-  const [lat, setLat] = useState<string | number>("");
-  const [lng, setLng] = useState<string | number>("");
+  const [mapInput, setMapInput] = useState("");
+  const [lat, setLat] = useState<number | "">("");
+  const [lng, setLng] = useState<number | "">("");
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -44,6 +77,63 @@ export default function CommunitiesManagerPage() {
     setSlug(val.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""));
   };
 
+  const handleMapInputChange = (value: string) => {
+    setMapInput(value);
+    
+    // Parse coordinates
+    const coords = extractCoordinatesFromGoogleMapsLink(value);
+    if (coords) {
+      setLat(coords.lat);
+      setLng(coords.lng);
+    } else {
+      // Also check if they just pasted a plain "lat, lng" string
+      const parts = value.split(",");
+      if (parts.length === 2) {
+        const l1 = parseFloat(parts[0].trim());
+        const l2 = parseFloat(parts[1].trim());
+        if (!isNaN(l1) && !isNaN(l2) && Math.abs(l1) <= 90 && Math.abs(l2) <= 180) {
+          setLat(l1);
+          setLng(l2);
+          return;
+        }
+      }
+      setLat("");
+      setLng("");
+    }
+  };
+
+  const handleFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      if (result) {
+        setBannerUrl(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  };
+
   const handleOpenAdd = () => {
     setEditingCommunity(null);
     setName("");
@@ -51,6 +141,7 @@ export default function CommunitiesManagerPage() {
     setDescription("");
     setIsFeatured(false);
     setBannerUrl("");
+    setMapInput("");
     setLat("");
     setLng("");
     setIsDrawerOpen(true);
@@ -63,8 +154,16 @@ export default function CommunitiesManagerPage() {
     setDescription(comm.description || "");
     setIsFeatured(comm.isFeatured);
     setBannerUrl(comm.bannerUrl || "");
-    setLat(comm.coordinates?.lat !== undefined ? comm.coordinates.lat : "");
-    setLng(comm.coordinates?.lng !== undefined ? comm.coordinates.lng : "");
+    
+    if (comm.coordinates?.lat !== undefined && comm.coordinates?.lng !== undefined) {
+      setLat(comm.coordinates.lat);
+      setLng(comm.coordinates.lng);
+      setMapInput(`https://www.google.com/maps?q=${comm.coordinates.lat},${comm.coordinates.lng}`);
+    } else {
+      setLat("");
+      setLng("");
+      setMapInput("");
+    }
     setIsDrawerOpen(true);
   };
 
@@ -268,49 +367,95 @@ export default function CommunitiesManagerPage() {
                   />
                 </div>
 
-                {/* Banner URL */}
+                {/* Banner Upload Drag & Drop */}
                 <div className="space-y-2">
                   <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
-                    Banner Image URL
+                    Community Banner Image
+                  </label>
+                  
+                  {bannerUrl ? (
+                    <div className="relative rounded-2xl overflow-hidden border border-luxury-border/30 aspect-[2/1] bg-luxury-charcoal flex items-center justify-center group">
+                      <img src={bannerUrl} alt="Preview" className="object-cover w-full h-full" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                        <label className="bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg px-3 py-1.5 text-xs font-semibold cursor-pointer transition-colors">
+                          Change
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleFile(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setBannerUrl("")}
+                          className="bg-red-500/80 hover:bg-red-500 text-white rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-300 relative cursor-pointer ${
+                        isDragging
+                          ? "border-luxury-gold bg-luxury-gold/5"
+                          : "border-luxury-border/40 hover:border-luxury-gold/30 bg-[#1f232c]"
+                      }`}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFile(file);
+                        }}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                      />
+                      <Upload className={`w-8 h-8 mb-3 transition-colors duration-300 ${isDragging ? "text-luxury-gold" : "text-gray-500"}`} />
+                      <span className="text-xs text-gray-300 font-semibold mb-1">
+                        Drag and drop community banner
+                      </span>
+                      <span className="text-[10px] text-gray-500">
+                        Supports PNG, JPG, WEBP (Max 5MB)
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Google Maps Location Link / Coordinates */}
+                <div className="space-y-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
+                    Google Maps Link or Coordinates
                   </label>
                   <input
                     type="text"
-                    value={bannerUrl}
-                    onChange={(e) => setBannerUrl(e.target.value)}
-                    placeholder="/assets/palm_jumeirah_render.png"
-                    className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
+                    value={mapInput}
+                    onChange={(e) => handleMapInputChange(e.target.value)}
+                    placeholder="Paste Google Maps URL or coordinates (e.g. 25.1124, 55.1390)"
+                    className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none placeholder-gray-600 transition-colors"
                   />
-                </div>
-
-                {/* Coordinates Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
-                      GPS Latitude
-                    </label>
-                    <input
-                      type="number"
-                      step="any"
-                      value={lat}
-                      onChange={(e) => setLat(e.target.value)}
-                      placeholder="e.g. 25.1124"
-                      className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
-                      GPS Longitude
-                    </label>
-                    <input
-                      type="number"
-                      step="any"
-                      value={lng}
-                      onChange={(e) => setLng(e.target.value)}
-                      placeholder="e.g. 55.1390"
-                      className="w-full bg-[#1f232c] border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none"
-                    />
-                  </div>
+                  
+                  {lat !== "" && lng !== "" ? (
+                    <p className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                      <span>✓ Detected Coordinates:</span>
+                      <span className="font-sans font-semibold">{Number(lat).toFixed(4)}° N, {Number(lng).toFixed(4)}° E</span>
+                    </p>
+                  ) : mapInput !== "" ? (
+                    <p className="text-[10px] text-orange-400 font-medium leading-relaxed">
+                      {mapInput.includes("maps.app.goo.gl") ? (
+                        <span>ℹ Short links (maps.app.goo.gl) require loading. Please use a full maps.google.com URL, or enter latitude and longitude directly.</span>
+                      ) : (
+                        <span>Coordinates not detected. Please verify the URL or type coordinates directly.</span>
+                      )}
+                    </p>
+                  ) : null}
                 </div>
 
                 {/* Feature Status */}
