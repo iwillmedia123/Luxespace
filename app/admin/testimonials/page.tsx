@@ -230,7 +230,7 @@ export default function TestimonialsManagerPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="flex-grow p-8 overflow-y-auto space-y-6">
+            <form onSubmit={handleSave} className="h-[calc(100vh-9rem)] overflow-y-auto p-8 space-y-6">
               <div className="space-y-4">
                 {/* Client Name */}
                 <div className="space-y-2">
