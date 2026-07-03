@@ -16,6 +16,8 @@ import SectionHeading from "@/components/layout/SectionHeading";
 import SectionDivider from "@/components/layout/SectionDivider";
 import AnimateIn from "@/components/motion/AnimateIn";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Luxespace Properties | Ultra-Luxury Real Estate Dubai",
   description: "Exquisite luxury villas, penthouses, and signature apartments in prime Dubai locations. Buy, rent, or invest in prime locations.",
@@ -289,6 +291,7 @@ const MOCK_BLOGS: BlogPost[] = [
     authorId: "author1",
     publishedAt: new Date().toISOString(),
     isPublished: true,
+    status: "published",
     tags: ["Market Advisory", "Investment"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -303,6 +306,7 @@ const MOCK_BLOGS: BlogPost[] = [
     authorId: "author2",
     publishedAt: new Date().toISOString(),
     isPublished: true,
+    status: "published",
     tags: ["Architecture", "Editorial"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -317,6 +321,7 @@ const MOCK_BLOGS: BlogPost[] = [
     authorId: "author1",
     publishedAt: new Date().toISOString(),
     isPublished: true,
+    status: "published",
     tags: ["Legal", "Tax Advisory"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -331,6 +336,7 @@ const MOCK_BLOGS: BlogPost[] = [
     authorId: "author3",
     publishedAt: new Date().toISOString(),
     isPublished: true,
+    status: "published",
     tags: ["Design System", "Architecture"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -359,7 +365,12 @@ export default async function HomePage() {
     }
 
     if (dbBlogs && dbBlogs.length > 0) {
-      blogsToShow = dbBlogs.slice(0, 4);
+      const published = dbBlogs.filter((b) => b.status === "published" || b.isPublished);
+      if (published.length > 0) {
+        blogsToShow = published.slice(0, 4);
+      } else {
+        blogsToShow = [];
+      }
     }
   } catch (err) {
     console.error("Error loading homepage dynamic data:", err);

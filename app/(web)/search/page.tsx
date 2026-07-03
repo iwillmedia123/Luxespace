@@ -105,7 +105,8 @@ function SearchResultsContent() {
         setAgents(filteredAgs);
 
         // Filter Blogs
-        const filteredBlogs = blogsList.filter(
+        const publishedBlogs = blogsList.filter((b) => b.status === "published" || b.isPublished);
+        const filteredBlogs = publishedBlogs.filter(
           (b) =>
             matchQuery(b.title, q) ||
             matchQuery(b.summary, q) ||

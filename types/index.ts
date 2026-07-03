@@ -153,6 +153,16 @@ export interface Testimonial {
   createdAt: string;
 }
 
+export interface BlogPostSeo {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -160,12 +170,30 @@ export interface BlogPost {
   summary: string;
   content: string;
   coverImage?: string;
+  gallery?: string[];
   authorId: string;
+  authorName?: string;
+  category?: string;
+  status: 'draft' | 'published' | 'scheduled' | 'archived';
+  readingTime?: number;
+  isFeaturedArticle?: boolean;
+  relatedProperties?: string[];
+  relatedCommunities?: string[];
+  relatedDevelopers?: string[];
+  relatedBlogs?: string[];
+  tags: string[];
   publishedAt?: string;
   isPublished: boolean;
-  tags: string[];
+  seo?: BlogPostSeo;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface NewsletterSubscriber {
+  id: string;
+  email: string;
+  status: 'active' | 'unsubscribed';
+  createdAt: string;
 }
 
 export interface FAQItem {

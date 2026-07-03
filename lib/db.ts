@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase";
-import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle } from "@/types";
+import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber } from "@/types";
 
 // Determine if we have live Supabase credentials configured
 const isSupabaseConfigured = () => {
@@ -4396,7 +4396,7 @@ const MOCK_TESTIMONIALS: Testimonial[] = [
 ];
 
 const MOCK_BLOGS: BlogPost[] = [
-  { id: "b1", title: "Dubai Q3 Luxury Real Estate Insights", slug: "dubai-q3-luxury-insights", summary: "In-depth HNW capital flows and yield analysis.", content: "Full editorial content...", coverImage: "/assets/apartment_render.png", authorId: "agent1", isPublished: true, tags: ["Market News", "Advisory"], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: "b1", title: "Dubai Q3 Luxury Real Estate Insights", slug: "dubai-q3-luxury-insights", summary: "In-depth HNW capital flows and yield analysis.", content: "Full editorial content...", coverImage: "/assets/apartment_render.png", authorId: "agent1", isPublished: true, status: "published", tags: ["Market News", "Advisory"], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
 ];
 
 const MOCK_FAQS: FAQItem[] = [
@@ -5166,10 +5166,20 @@ function mapBlogFromDB(b: any): BlogPost {
     summary: b.summary,
     content: b.content,
     coverImage: b.cover_image || undefined,
+    gallery: b.gallery || [],
     authorId: fromUUID(b.author_id),
+    category: b.category || undefined,
+    status: (b.status as any) || (b.is_published ? "published" : "draft"),
+    readingTime: b.reading_time || 5,
+    isFeaturedArticle: b.is_featured_article || false,
+    relatedProperties: b.related_properties ? b.related_properties.map(fromUUID) : [],
+    relatedCommunities: b.related_communities ? b.related_communities.map(fromUUID) : [],
+    relatedDevelopers: b.related_developers ? b.related_developers.map(fromUUID) : [],
+    relatedBlogs: b.related_blogs ? b.related_blogs.map(fromUUID) : [],
     publishedAt: b.published_at || undefined,
     isPublished: b.is_published,
     tags: b.tags || [],
+    seo: b.seo || {},
     createdAt: b.created_at,
     updatedAt: b.updated_at
   };
@@ -5416,10 +5426,20 @@ function mapBlogToDB(b: any): any {
     summary: b.summary,
     content: b.content,
     cover_image: b.coverImage || null,
+    gallery: b.gallery || [],
     author_id: toUUID(b.authorId),
+    category: b.category || null,
+    status: b.status || (b.isPublished ? "published" : "draft"),
+    reading_time: b.readingTime || 5,
+    is_featured_article: b.isFeaturedArticle || false,
+    related_properties: b.relatedProperties ? b.relatedProperties.map(toUUID) : [],
+    related_communities: b.relatedCommunities ? b.relatedCommunities.map(toUUID) : [],
+    related_developers: b.relatedDevelopers ? b.relatedDevelopers.map(toUUID) : [],
+    related_blogs: b.relatedBlogs ? b.relatedBlogs.map(toUUID) : [],
     published_at: b.publishedAt || null,
     is_published: b.isPublished || false,
     tags: b.tags || [],
+    seo: b.seo || {},
     created_at: b.createdAt,
     updated_at: b.updatedAt
   };
@@ -5922,10 +5942,20 @@ export const db = {
       if (blog.summary !== undefined) dbPatch.summary = blog.summary;
       if (blog.content !== undefined) dbPatch.content = blog.content;
       if (blog.coverImage !== undefined) dbPatch.cover_image = blog.coverImage;
+      if (blog.gallery !== undefined) dbPatch.gallery = blog.gallery;
       if (blog.authorId !== undefined) dbPatch.author_id = toUUID(blog.authorId);
+      if (blog.category !== undefined) dbPatch.category = blog.category;
+      if (blog.status !== undefined) dbPatch.status = blog.status;
+      if (blog.readingTime !== undefined) dbPatch.reading_time = blog.readingTime;
+      if (blog.isFeaturedArticle !== undefined) dbPatch.is_featured_article = blog.isFeaturedArticle;
+      if (blog.relatedProperties !== undefined) dbPatch.related_properties = blog.relatedProperties.map(toUUID);
+      if (blog.relatedCommunities !== undefined) dbPatch.related_communities = blog.relatedCommunities.map(toUUID);
+      if (blog.relatedDevelopers !== undefined) dbPatch.related_developers = blog.relatedDevelopers.map(toUUID);
+      if (blog.relatedBlogs !== undefined) dbPatch.related_blogs = blog.relatedBlogs.map(toUUID);
       if (blog.publishedAt !== undefined) dbPatch.published_at = blog.publishedAt;
       if (blog.isPublished !== undefined) dbPatch.is_published = blog.isPublished;
       if (blog.tags !== undefined) dbPatch.tags = blog.tags;
+      if (blog.seo !== undefined) dbPatch.seo = blog.seo;
       dbPatch.updated_at = updatedAt;
       
       const { error, data } = await supabase.from("blogs").update(dbPatch).eq("id", dbId).select().single();
@@ -6307,6 +6337,63 @@ export const db = {
       if (error) console.error("Supabase getLifestyle error:", error.message);
     }
     return mockDB.get<LifestyleArticle>("lifestyle");
+  },
+
+  // Newsletter Subscriptions
+  async subscribeToNewsletter(email: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("newsletter_subscribers").insert({ email, status: 'active' });
+      if (error) {
+        console.error("Supabase subscribeToNewsletter error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
+    const list = mockDB.get<any>("newsletter_subscribers") || [];
+    if (!list.some((s: any) => s.email === email)) {
+      list.push({ id: crypto.randomUUID(), email, status: 'active', createdAt: new Date().toISOString() });
+      mockDB.save("newsletter_subscribers", list);
+    }
+    return true;
+  },
+
+  async getNewsletterSubscribers(): Promise<NewsletterSubscriber[]> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("newsletter_subscribers").select("*").order("created_at", { ascending: false });
+      if (!error && data) {
+        return (data as any[]).map(d => ({
+          id: fromUUID(d.id),
+          email: d.email,
+          status: d.status,
+          createdAt: d.created_at
+        }));
+      }
+      if (error) console.error("Supabase getNewsletterSubscribers error:", error.message);
+    }
+    const list = mockDB.get<any>("newsletter_subscribers") || [];
+    return list.map((d: any) => ({
+      id: d.id,
+      email: d.email,
+      status: d.status,
+      createdAt: d.createdAt
+    }));
+  },
+
+  async deleteNewsletterSubscriber(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("newsletter_subscribers").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteNewsletterSubscriber error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
+    const list = mockDB.get<any>("newsletter_subscribers") || [];
+    mockDB.save("newsletter_subscribers", list.filter((s: any) => s.id !== id));
+    return true;
   }
 };
 export default db;
