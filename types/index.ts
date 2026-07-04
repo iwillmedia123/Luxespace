@@ -249,3 +249,10 @@ export interface LifestyleArticle {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BlogCategory {
+  id: string;
+  name: string;
+  slug: string;
+  createdAt: string;
+}

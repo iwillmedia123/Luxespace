@@ -5,6 +5,7 @@ import Typography from "@/components/ui/Typography";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import { db } from "@/lib/db";
 
 export interface NewsletterSectionProps {
   className?: string;
@@ -18,11 +19,18 @@ export default function NewsletterSection({ className }: NewsletterSectionProps)
     e.preventDefault();
     setStatus("loading");
     
-    // Simulate API registration delay
-    setTimeout(() => {
-      setStatus("success");
-      setEmail("");
-    }, 1200);
+    try {
+      const res = await db.subscribeToNewsletter(email);
+      if (res) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error("Error subscribing to newsletter:", err);
+      setStatus("error");
+    }
   };
 
   return (

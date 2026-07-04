@@ -13,6 +13,7 @@ import NewsletterSection from "@/components/layout/NewsletterSection";
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [dbCategories, setDbCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Filters
@@ -41,14 +42,20 @@ export default function BlogPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [bls, ags] = await Promise.all([
+        const [bls, ags, cats] = await Promise.all([
           db.getBlogs(),
           db.getAgents(),
+          db.getBlogCategories(),
         ]);
         // Only show published blogs on public pages
-        const publishedBlogs = bls.filter(b => b.status === "published" || b.isPublished);
+        const publishedBlogs = bls
+          .filter(b => b.status === "published" || b.isPublished)
+          .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
         setBlogs(publishedBlogs);
         setAgents(ags);
+        if (cats && cats.length > 0) {
+          setDbCategories(["All", ...cats.map(c => c.name)]);
+        }
       } catch (err) {
         console.error("Error loading blog catalog:", err);
       } finally {
@@ -220,7 +227,7 @@ export default function BlogPage() {
                     Categories
                   </span>
                   <div className="flex flex-col gap-2">
-                    {categories.map((cat) => (
+                    {(dbCategories.length > 0 ? dbCategories : categories).map((cat) => (
                       <button
                         key={cat}
                         onClick={() => {

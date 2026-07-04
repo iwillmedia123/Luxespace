@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase";
-import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber } from "@/types";
+import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber, BlogCategory } from "@/types";
 
 // Determine if we have live Supabase credentials configured
 const isSupabaseConfigured = () => {
@@ -5185,6 +5185,15 @@ function mapBlogFromDB(b: any): BlogPost {
   };
 }
 
+function mapCategoryFromDB(c: any): BlogCategory {
+  return {
+    id: fromUUID(c.id),
+    name: c.name,
+    slug: c.slug,
+    createdAt: c.created_at
+  };
+}
+
 function mapTestimonialFromDB(t: any): Testimonial {
   return {
     id: t.id,
@@ -5988,6 +5997,88 @@ export const db = {
     }
     const list = mockDB.get<BlogPost>("blogs");
     mockDB.save("blogs", list.filter((b) => b.id !== id));
+    return true;
+  },
+
+  // Blog Categories CRUD
+  async getBlogCategories(): Promise<BlogCategory[]> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("blog_categories").select("*").order("name", { ascending: true });
+      if (!error && data) {
+        return (data as any[]).map(mapCategoryFromDB);
+      }
+      if (error) console.error("Supabase getBlogCategories error:", error.message);
+    }
+    let list = mockDB.get<BlogCategory>("blog_categories");
+    if (!list || list.length === 0) {
+      const defaults = ["Dubai Real Estate News", "Investment Guides", "Market Insights", "Luxury Lifestyle", "Community Guides", "Interior Design", "Property Tips"];
+      list = defaults.map((name, idx) => ({
+        id: `cat-${idx + 1}`,
+        name,
+        slug: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        createdAt: new Date().toISOString()
+      }));
+      mockDB.save("blog_categories", list);
+    }
+    return list;
+  },
+
+  async createBlogCategory(name: string, slug: string): Promise<BlogCategory> {
+    const id = crypto.randomUUID();
+    const newRecord: BlogCategory = { id, name, slug, createdAt: new Date().toISOString() };
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("blog_categories").insert({
+        id: toUUID(id),
+        name,
+        slug,
+        created_at: newRecord.createdAt
+      });
+      if (error) {
+        console.error("Supabase createBlogCategory error:", error.message);
+        throw new Error(error.message);
+      }
+      return newRecord;
+    }
+    const list = mockDB.get<BlogCategory>("blog_categories");
+    list.push(newRecord);
+    mockDB.save("blog_categories", list);
+    return newRecord;
+  },
+
+  async updateBlogCategory(id: string, name: string, slug: string): Promise<BlogCategory> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error, data } = await supabase.from("blog_categories").update({ name, slug }).eq("id", toUUID(id)).select().single();
+      if (error) {
+        console.error("Supabase updateBlogCategory error:", error.message);
+        throw new Error(error.message);
+      }
+      return mapCategoryFromDB(data);
+    }
+    const list = mockDB.get<BlogCategory>("blog_categories");
+    const idx = list.findIndex((c) => c.id === id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], name, slug };
+      mockDB.save("blog_categories", list);
+      return list[idx];
+    }
+    throw new Error("Category not found");
+  },
+
+  async deleteBlogCategory(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("blog_categories").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteBlogCategory error:", error.message);
+        throw new Error(error.message);
+      }
+      return true;
+    }
+    const list = mockDB.get<BlogCategory>("blog_categories");
+    mockDB.save("blog_categories", list.filter((c) => c.id !== id));
     return true;
   },
 

@@ -43,6 +43,11 @@ export default function MediaUploadGrid({
       const newUrls: string[] = [];
 
       for (const file of fileArray) {
+        if (maxImages === 1) {
+          const url = await fileToDataUrl(file, 1200, 0.85);
+          newUrls.push(url);
+          break;
+        }
         if (images.length + newUrls.length >= maxImages) break;
 
         // Compress + convert to base64 data URL (sandbox mode)
@@ -51,7 +56,11 @@ export default function MediaUploadGrid({
         newUrls.push(url);
       }
 
-      onChange([...images, ...newUrls]);
+      if (maxImages === 1 && newUrls.length > 0) {
+        onChange(newUrls);
+      } else {
+        onChange([...images, ...newUrls]);
+      }
       setUploading(false);
     },
     [images, onChange, maxImages]

@@ -365,7 +365,9 @@ export default async function HomePage() {
     }
 
     if (dbBlogs && dbBlogs.length > 0) {
-      const published = dbBlogs.filter((b) => b.status === "published" || b.isPublished);
+      const published = dbBlogs
+        .filter((b) => b.status === "published" || b.isPublished)
+        .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
       if (published.length > 0) {
         blogsToShow = published.slice(0, 4);
       } else {

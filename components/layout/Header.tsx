@@ -67,12 +67,12 @@ export default function Header() {
       )}
       onMouseLeave={() => setActiveMegaMenu(null)}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 xl:px-8">
         <div className="flex items-center justify-between">
           
            {/* Brand Identity / Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group mr-4 xl:mr-8 shrink-0">
-            <div className="relative w-9 h-9 overflow-hidden rounded bg-luxury-dark border border-luxury-gold/20 flex items-center justify-center p-1">
+          <Link href="/" className="flex items-center gap-1.5 xl:gap-2.5 group mr-2 xl:mr-6 2xl:mr-8 shrink-0">
+            <div className="relative w-8 h-8 xl:w-9 xl:h-9 overflow-hidden rounded bg-luxury-dark border border-luxury-gold/20 flex items-center justify-center p-1">
               <Image
                 src="/assets/logo.png"
                 alt="Luxespace Properties"
@@ -81,13 +81,13 @@ export default function Header() {
                 className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <span className="font-serif text-base tracking-widest text-white transition-colors duration-300 group-hover:text-luxury-gold uppercase">
+            <span className="font-serif text-xs sm:text-sm xl:text-base tracking-widest text-white transition-colors duration-300 group-hover:text-luxury-gold uppercase">
               Luxespace
             </span>
           </Link>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex items-center lg:gap-2.5 xl:gap-5 shrink-0">
+          <nav className="hidden lg:flex items-center lg:gap-1.5 xl:gap-3 2xl:gap-5 shrink-0">
             {NAV_LINKS.filter(link => link.href !== "/wishlist").map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -105,7 +105,7 @@ export default function Header() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "text-[9px] xl:text-[10px] uppercase tracking-widest font-semibold transition-colors duration-300 pb-1.5 block relative group",
+                      "text-[8px] xl:text-[9px] 2xl:text-[10px] uppercase tracking-wide xl:tracking-widest font-semibold transition-colors duration-300 pb-1.5 block relative group",
                       isActive
                         ? "text-luxury-gold"
                         : "text-gray-300 hover:text-luxury-gold"
@@ -126,12 +126,12 @@ export default function Header() {
           </nav>
 
           {/* Utility Tools & Calls To Action */}
-          <div className="hidden sm:flex items-center gap-3 xl:gap-5 shrink-0 ml-4 xl:ml-8">
+          <div className="hidden sm:flex items-center gap-1.5 xl:gap-3 2xl:gap-5 shrink-0 ml-2 xl:ml-6 2xl:ml-8">
             {/* Search Trigger */}
             <button
               onClick={() => setShowSearch(!showSearch)}
               type="button"
-              className="text-gray-400 hover:text-luxury-gold transition-colors duration-300 p-2 cursor-pointer"
+              className="text-gray-400 hover:text-luxury-gold transition-colors duration-300 p-1 xl:p-2 cursor-pointer"
               aria-label="Search Catalog"
             >
               {showSearch ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
@@ -140,7 +140,7 @@ export default function Header() {
             {/* Wishlist Trigger */}
             <Link
               href="/wishlist"
-              className="text-gray-400 hover:text-luxury-gold transition-colors duration-300 p-2 cursor-pointer relative"
+              className="text-gray-400 hover:text-luxury-gold transition-colors duration-300 p-1 xl:p-2 cursor-pointer relative"
               aria-label="Wishlist"
             >
               <Heart className="w-4 h-4" />
@@ -156,10 +156,10 @@ export default function Header() {
               href="https://wa.me/9745334644"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-[9px] xl:text-[10px] uppercase tracking-widest text-gray-300 hover:text-luxury-gold transition-colors duration-300 border border-luxury-border/60 hover:border-luxury-gold/50 px-3.5 py-2.5 rounded-full"
+              className="flex items-center gap-1 xl:gap-1.5 text-[8px] xl:text-[9px] 2xl:text-[10px] uppercase tracking-wider xl:tracking-widest text-gray-300 hover:text-luxury-gold transition-colors duration-300 border border-luxury-border/60 hover:border-luxury-gold/50 px-2 py-1.5 xl:px-3.5 xl:py-2.5 rounded-full"
             >
               <MessageSquare className="w-3.5 h-3.5 text-luxury-gold" />
-              <span className="hidden xl:inline">WhatsApp</span>
+              <span className="hidden 2xl:inline">WhatsApp</span>
             </a>
 
             {/* Consultation CTA */}
@@ -167,11 +167,11 @@ export default function Header() {
               variant="primary"
               size="sm"
               onClick={() => (window.location.href = "/contact")}
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-1 xl:gap-1.5 text-[8px] xl:text-[9px] 2xl:text-[10px]"
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span className="hidden xl:inline">Book Consultation</span>
-              <span className="inline xl:hidden text-[9px]">Book</span>
+              <span className="hidden 2xl:inline">Book Consultation</span>
+              <span className="inline 2xl:hidden">Book</span>
             </Button>
           </div>
 
