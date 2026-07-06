@@ -7,9 +7,13 @@ import { Agent } from "@/types";
 import Typography from "@/components/ui/Typography";
 import Button from "@/components/ui/Button";
 
+import dynamic from "next/dynamic";
+const MediaUploadGrid = dynamic(() => import("@/components/admin/MediaUploadGrid"), { ssr: false });
+
 export default function AgentsManagerPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [search, setSearch] = useState("");
 
   // Drawer modal state
@@ -28,6 +32,7 @@ export default function AgentsManagerPage() {
   const [experienceYears, setExperienceYears] = useState(5);
   const [bio, setBio] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   useEffect(() => {
     async function loadData() {
@@ -61,6 +66,7 @@ export default function AgentsManagerPage() {
     setExperienceYears(5);
     setBio("");
     setIsFeatured(false);
+    setAvatarUrl("");
     setIsDrawerOpen(true);
   };
 
@@ -77,26 +83,28 @@ export default function AgentsManagerPage() {
     setExperienceYears(ag.experienceYears || 5);
     setBio(ag.bio || "");
     setIsFeatured(ag.isFeatured);
+    setAvatarUrl(ag.avatarUrl || "");
     setIsDrawerOpen(true);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    if (!name.trim() || isSaving) return;
+    setIsSaving(true);
 
     const payload: Omit<Agent, "id" | "createdAt" | "updatedAt"> = {
-      name,
-      slug,
-      title,
-      email,
-      phone,
-      whatsapp,
+      name: name.trim(),
+      slug: slug.trim(),
+      title: title.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      whatsapp: whatsapp.trim(),
       languages: languagesText.split(",").map((s) => s.trim()).filter(Boolean),
       specialization: specializationText.split(",").map((s) => s.trim()).filter(Boolean),
       experienceYears,
-      bio,
+      bio: bio.trim(),
       isFeatured,
-      avatarUrl: "/assets/logo.png",
+      avatarUrl: avatarUrl || "/assets/logo.png",
     };
 
     try {
@@ -112,23 +120,37 @@ export default function AgentsManagerPage() {
     } catch (err) {
       console.error("Save error:", err);
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this agent?")) {
       setLoading(true);
-      await db.deleteAgent(id);
-      const updated = await db.getAgents();
-      setAgents(updated);
-      setLoading(false);
+      try {
+        await db.deleteAgent(id);
+        const updated = await db.getAgents();
+        setAgents(updated);
+      } catch (err) {
+        console.error("Delete error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const filtered = agents.filter((a) =>
     a.name.toLowerCase().includes(search.toLowerCase()) || a.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-[50vh] flex flex-col justify-center items-center space-y-4 select-none">
+        <div className="w-10 h-10 border-2 border-luxury-gold border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs text-luxury-gold font-light tracking-wider uppercase">Loading Advisors...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -256,6 +278,18 @@ export default function AgentsManagerPage() {
 
             <form onSubmit={handleSave} className="h-[calc(100vh-9rem)] overflow-y-auto p-8 space-y-6" data-lenis-prevent>
               <div className="space-y-4">
+                {/* Advisor Profile Photo drag and drop uploader */}
+                <div className="space-y-2">
+                  <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold block">
+                    Advisor Profile Photo
+                  </label>
+                  <MediaUploadGrid
+                    images={avatarUrl ? [avatarUrl] : []}
+                    onChange={(imgs) => setAvatarUrl(imgs[0] || "")}
+                    maxImages={1}
+                  />
+                </div>
+
                 {/* Name */}
                 <div className="space-y-2">
                   <label className="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">
@@ -423,9 +457,10 @@ export default function AgentsManagerPage() {
                 type="button"
                 variant="primary"
                 onClick={handleSave}
+                disabled={isSaving}
                 className="text-xs"
               >
-                {editingAgent ? "Save Changes" : "Create Agent"}
+                {isSaving ? "Saving..." : (editingAgent ? "Save Changes" : "Create Agent")}
               </Button>
             </div>
           </div>
