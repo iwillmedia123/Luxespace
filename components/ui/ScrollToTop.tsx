@@ -10,18 +10,26 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Toggle visibility
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      // Toggle visibility (only trigger state update if changed)
+      const shouldBeVisible = window.scrollY > 300;
+      setIsVisible((prev) => {
+        if (prev !== shouldBeVisible) {
+          return shouldBeVisible;
+        }
+        return prev;
+      });
 
       // Calculate progress
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (totalHeight > 0) {
         const progress = (window.scrollY / totalHeight) * 100;
-        setScrollProgress(progress);
+        setScrollProgress((prev) => {
+          // Avoid tiny fractional updates to prevent excessive renders
+          if (Math.abs(prev - progress) > 0.5 || progress === 100 || progress === 0) {
+            return progress;
+          }
+          return prev;
+        });
       }
     };
 

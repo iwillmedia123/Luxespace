@@ -40,7 +40,9 @@ export default function CustomCursor() {
     // Handle cursor expansion when hovering over links and buttons
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
+      if (!target) return;
+
+      const shouldHover = !!(
         target.tagName === "A" ||
         target.tagName === "BUTTON" ||
         target.tagName === "IMG" ||
@@ -49,12 +51,15 @@ export default function CustomCursor() {
         target.closest("img") ||
         target.closest(".group") ||
         target.closest("[role='button']") ||
-        target.classList.contains("cursor-pointer-hover")
-      ) {
-        setIsHovered(true);
-      } else {
-        setIsHovered(false);
-      }
+        (target.classList && target.classList.contains("cursor-pointer-hover"))
+      );
+
+      setIsHovered((prev) => {
+        if (prev !== shouldHover) {
+          return shouldHover;
+        }
+        return prev;
+      });
     };
 
     window.addEventListener("mousemove", moveCursor);

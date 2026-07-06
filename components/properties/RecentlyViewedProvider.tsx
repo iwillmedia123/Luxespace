@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Property } from "@/types";
 
 interface RecentlyViewedContextType {
@@ -24,7 +24,7 @@ export function RecentlyViewedProvider({ children }: { children: React.ReactNode
     }
   }, []);
 
-  const addViewed = (property: Property) => {
+  const addViewed = useCallback((property: Property) => {
     setRecentlyViewed((prev) => {
       // Remove duplicate if it already exists
       const filtered = prev.filter((p) => p.id !== property.id);
@@ -33,7 +33,7 @@ export function RecentlyViewedProvider({ children }: { children: React.ReactNode
       localStorage.setItem("luxespace_recently_viewed", JSON.stringify(updated));
       return updated;
     });
-  };
+  }, []);
 
   return (
     <RecentlyViewedContext.Provider value={{ recentlyViewed, addViewed }}>
