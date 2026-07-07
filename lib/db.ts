@@ -5454,6 +5454,23 @@ function mapBlogToDB(b: any): any {
   };
 }
 
+// Helper to dynamically map static png assets to webp
+function mapPngToWebp(url: string | undefined): string | undefined {
+  if (typeof url !== "string") return url;
+  if (url.includes("_render.png")) {
+    return url.replace(".png", ".webp");
+  }
+  return url;
+}
+
+function mapPngToWebpString(url: string): string {
+  if (typeof url !== "string") return url;
+  if (url.includes("_render.png")) {
+    return url.replace(".png", ".webp");
+  }
+  return url;
+}
+
 // Dynamic Content Provider
 export const db = {
   // Properties CRUD
@@ -5467,12 +5484,16 @@ export const db = {
       if (error) console.error("Supabase getProperties error:", error.message);
     }
     const props = mockDB.get<Property>("properties");
-    const comms = mockDB.get<Community>("communities");
+    const comms = mockDB.get<Community>("communities").map(c => ({
+      ...c,
+      bannerUrl: mapPngToWebp(c.bannerUrl)
+    }));
     const devs = mockDB.get<Developer>("developers");
     const ags = mockDB.get<Agent>("agents");
     
     return props.map(p => ({
       ...p,
+      images: p.images ? p.images.map(mapPngToWebpString) : [],
       community: comms.find(c => c.id === p.communityId),
       developer: devs.find(d => d.id === p.developerId),
       agent: ags.find(a => a.id === p.agentId),
@@ -5745,7 +5766,10 @@ export const db = {
       }
       if (error) console.error("Supabase getCommunities error:", error.message);
     }
-    return mockDB.get<Community>("communities");
+    return mockDB.get<Community>("communities").map(c => ({
+      ...c,
+      bannerUrl: mapPngToWebp(c.bannerUrl)
+    }));
   },
 
   async createCommunity(community: Omit<Community, "id" | "createdAt" | "updatedAt">): Promise<Community> {

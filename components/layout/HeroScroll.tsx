@@ -93,7 +93,7 @@ export default function HeroScroll() {
     // Image URL constructor
     const getFrameUrl = (frameIndex: number) => {
       const paddedIndex = frameIndex.toString().padStart(5, "0");
-      return `/assets/scroll-animation/Temp-frame_${paddedIndex}.jpg`;
+      return `/assets/scroll-animation/Temp-frame_${paddedIndex}.webp`;
     };
 
     // Preloading Logic
