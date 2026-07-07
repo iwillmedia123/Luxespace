@@ -345,18 +345,24 @@ const MOCK_BLOGS: BlogPost[] = [
 
 export default async function HomePage() {
   let propertiesToShow = MOCK_PROPERTIES;
+  let latestPropertiesToShow = MOCK_PROPERTIES.slice(0, 4);
   let communitiesToShow = MOCK_COMMUNITIES;
   let blogsToShow = MOCK_BLOGS;
 
   try {
-    const [dbProperties, dbCommunities, dbBlogs] = await Promise.all([
+    const [dbProperties, dbLatestProperties, dbCommunities, dbBlogs] = await Promise.all([
       db.getPropertiesByFilters({ isFeatured: true }),
+      db.getPropertiesByFilters({ sort: "newest" }),
       db.getCommunities(),
       db.getBlogs(),
     ]);
 
     if (dbProperties && dbProperties.length > 0) {
       propertiesToShow = dbProperties.slice(0, 4);
+    }
+
+    if (dbLatestProperties && dbLatestProperties.length > 0) {
+      latestPropertiesToShow = dbLatestProperties.slice(0, 4);
     }
     
     const featuredComms = dbCommunities ? dbCommunities.filter((c) => c.isFeatured) : [];
@@ -406,6 +412,36 @@ export default async function HomePage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {propertiesToShow.map((property) => (
+            <AnimateIn key={property.id} preset="fade-up" duration={0.85}>
+              <PropertyCard property={property} />
+            </AnimateIn>
+          ))}
+        </div>
+      </section>
+
+      {/* Section Divider */}
+      <SectionDivider />
+
+      {/* Latest Projects Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-36">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-b border-luxury-border/20 pb-8 mb-12">
+          <SectionHeading
+            subtitle="Newly Added"
+            title="Latest Projects"
+            description="Explore our most recently listed ultra-luxury residences and off-plan assets in premium Dubai addresses."
+          />
+          <Link href="/properties" className="mt-6 md:mt-0">
+            <Button
+              variant="outline"
+              className="border-white/20 hover:border-luxury-gold hover:text-luxury-gold"
+            >
+              View Latest Additions
+            </Button>
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {latestPropertiesToShow.map((property) => (
             <AnimateIn key={property.id} preset="fade-up" duration={0.85}>
               <PropertyCard property={property} />
             </AnimateIn>
