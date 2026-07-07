@@ -5073,13 +5073,29 @@ function fromUUID(uuid: string): string {
   return uuid;
 }
 
+function mapPngToWebp(url: string | undefined): string | undefined {
+  if (typeof url !== "string") return url;
+  if (url.includes("_render.png")) {
+    return url.replace(".png", ".webp");
+  }
+  return url;
+}
+
+function mapPngToWebpString(url: string): string {
+  if (typeof url !== "string") return url;
+  if (url.includes("_render.png")) {
+    return url.replace(".png", ".webp");
+  }
+  return url;
+}
+
 function mapCommunityFromDB(c: any): Community {
   return {
     id: fromUUID(c.id),
     name: c.name,
     slug: c.slug,
     description: c.description || undefined,
-    bannerUrl: c.banner_url || undefined,
+    bannerUrl: mapPngToWebp(c.banner_url || undefined),
     coordinates: c.coordinates || undefined,
     isFeatured: c.is_featured,
     createdAt: c.created_at,
@@ -5144,7 +5160,7 @@ function mapPropertyFromDB(p: any): Property {
     agentId: fromUUID(p.agent_id),
     latitude: p.latitude || undefined,
     longitude: p.longitude || undefined,
-    images: p.images || [],
+    images: p.images ? p.images.map(mapPngToWebpString) : [],
     videos: p.videos || [],
     amenities: p.amenities || [],
     isFeatured: p.is_featured,
@@ -5165,8 +5181,8 @@ function mapBlogFromDB(b: any): BlogPost {
     slug: b.slug,
     summary: b.summary,
     content: b.content,
-    coverImage: b.cover_image || undefined,
-    gallery: b.gallery || [],
+    coverImage: mapPngToWebp(b.cover_image || undefined),
+    gallery: b.gallery ? b.gallery.map(mapPngToWebpString) : [],
     authorId: fromUUID(b.author_id),
     category: b.category || undefined,
     status: (b.status as any) || (b.is_published ? "published" : "draft"),
@@ -5454,22 +5470,6 @@ function mapBlogToDB(b: any): any {
   };
 }
 
-// Helper to dynamically map static png assets to webp
-function mapPngToWebp(url: string | undefined): string | undefined {
-  if (typeof url !== "string") return url;
-  if (url.includes("_render.png")) {
-    return url.replace(".png", ".webp");
-  }
-  return url;
-}
-
-function mapPngToWebpString(url: string): string {
-  if (typeof url !== "string") return url;
-  if (url.includes("_render.png")) {
-    return url.replace(".png", ".webp");
-  }
-  return url;
-}
 
 // Dynamic Content Provider
 export const db = {
