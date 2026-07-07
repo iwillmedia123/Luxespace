@@ -4,6 +4,7 @@ import "./globals.css";
 import LenisProvider from "@/components/motion/LenisProvider";
 import CustomCursor from "@/components/ui/CustomCursor";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import TransitionLoader from "@/components/ui/TransitionLoader";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { FavouritesProvider } from "@/components/properties/FavouritesProvider";
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="bg-luxury-charcoal text-white">
         <LenisProvider>
           <LoadingScreen />
+          <TransitionLoader />
           <CustomCursor />
           <ScrollToTop />
           <WhatsAppButton />
