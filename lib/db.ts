@@ -5144,7 +5144,7 @@ function mapPropertyFromDB(p: any): Property {
     id: fromUUID(p.id),
     title: p.title,
     slug: p.slug,
-    description: p.description,
+    description: p.description || "",
     price: Number(p.price),
     priceUsd: p.price_usd ? Number(p.price_usd) : undefined,
     type: p.type as any,
@@ -5180,7 +5180,7 @@ function mapBlogFromDB(b: any): BlogPost {
     title: b.title,
     slug: b.slug,
     summary: b.summary,
-    content: b.content,
+    content: b.content || "",
     coverImage: mapPngToWebp(b.cover_image || undefined),
     gallery: b.gallery ? b.gallery.map(mapPngToWebpString) : [],
     authorId: fromUUID(b.author_id),
@@ -5501,6 +5501,18 @@ export const db = {
   },
 
   async getPropertyBySlug(slug: string): Promise<Property | null> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("properties")
+        .select("*, community:communities(*), developer:developers(*), agent:agents(*)")
+        .eq("slug", slug)
+        .single();
+      if (!error && data) {
+        return mapPropertyFromDB(data);
+      }
+      if (error) console.error("Supabase getPropertyBySlug error:", error.message);
+    }
     const all = await this.getProperties();
     return all.find(p => p.slug === slug) || null;
   },
@@ -5510,6 +5522,8 @@ export const db = {
     type?: string;
     community?: string;
     developer?: string;
+    agent?: string;
+    ids?: string[];
     minPrice?: number;
     maxPrice?: number;
     minArea?: number;
@@ -5521,13 +5535,80 @@ export const db = {
     isFeatured?: boolean;
     search?: string;
     sort?: string;
-  }): Promise<Property[]> {
+    page?: number;
+    limit?: number;
+    isSummary?: boolean;
+  }): Promise<{ properties: Property[]; totalCount: number }> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      
+      const selectStr = filters.isSummary
+        ? "id, title, slug, price, type, status, completion_status, bedrooms, bathrooms, area_sqft, location, is_featured, images, developer_id, community_id, agent_id, developer:developers(name)"
+        : "*, community:communities(*), developer:developers(*), agent:agents(*)";
+
+      let query = supabase
+        .from("properties")
+        .select(selectStr, { count: "exact" });
+
+      if (filters.purpose) query = query.eq("status", filters.purpose);
+      if (filters.type) query = query.eq("type", filters.type);
+      if (filters.community) query = query.eq("community_id", toUUID(filters.community));
+      if (filters.developer) query = query.eq("developer_id", toUUID(filters.developer));
+      if (filters.agent) query = query.eq("agent_id", toUUID(filters.agent));
+      if (filters.ids && filters.ids.length > 0) query = query.in("id", filters.ids.map(toUUID));
+      if (filters.minPrice !== undefined) query = query.gte("price", filters.minPrice);
+      if (filters.maxPrice !== undefined) query = query.lte("price", filters.maxPrice);
+      if (filters.minArea !== undefined) query = query.gte("area_sqft", filters.minArea);
+      if (filters.maxArea !== undefined) query = query.lte("area_sqft", filters.maxArea);
+      if (filters.bedrooms !== undefined) query = query.gte("bedrooms", filters.bedrooms);
+      if (filters.bathrooms !== undefined) query = query.gte("bathrooms", filters.bathrooms);
+      if (filters.parking !== undefined) query = query.gte("parking", filters.parking);
+      if (filters.completionStatus) query = query.eq("completion_status", filters.completionStatus);
+      if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
+      
+      if (filters.search) {
+        const q = `%${filters.search}%`;
+        query = query.or(`title.ilike.${q},location.ilike.${q},description.ilike.${q}`);
+      }
+
+      // Sorting
+      switch (filters.sort) {
+        case "price-asc": query = query.order("price", { ascending: true }); break;
+        case "price-desc": query = query.order("price", { ascending: false }); break;
+        case "newest": query = query.order("created_at", { ascending: false }); break;
+        case "area-desc": query = query.order("area_sqft", { ascending: false }); break;
+        case "featured": query = query.order("is_featured", { ascending: false }); break;
+        default: query = query.order("is_featured", { ascending: false });
+      }
+
+      // Pagination
+      if (filters.page && filters.limit) {
+        const from = (filters.page - 1) * filters.limit;
+        const to = from + filters.limit - 1;
+        query = query.range(from, to);
+      } else if (filters.limit) {
+        query = query.limit(filters.limit);
+      }
+
+      const { data, error, count } = await query;
+      if (!error && data) {
+        return {
+          properties: (data as any[]).map(mapPropertyFromDB),
+          totalCount: count || data.length,
+        };
+      }
+      if (error) console.error("Supabase getPropertiesByFilters error:", error.message);
+    }
+
+    // Fallback Mock DB query path
     let list = await this.getProperties();
     
     if (filters.purpose) list = list.filter(p => p.status === filters.purpose);
     if (filters.type) list = list.filter(p => p.type === filters.type);
     if (filters.community) list = list.filter(p => p.communityId === filters.community);
     if (filters.developer) list = list.filter(p => p.developerId === filters.developer);
+    if (filters.agent) list = list.filter(p => p.agentId === filters.agent);
+    if (filters.ids && filters.ids.length > 0) list = list.filter(p => filters.ids!.includes(p.id));
     if (filters.minPrice !== undefined) { const val = filters.minPrice; list = list.filter(p => p.price >= val); }
     if (filters.maxPrice !== undefined) { const val = filters.maxPrice; list = list.filter(p => p.price <= val); }
     if (filters.minArea !== undefined) { const val = filters.minArea; list = list.filter(p => p.areaSqft >= val); }
@@ -5556,10 +5637,45 @@ export const db = {
       default: list.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
     }
 
-    return list;
+    const totalCount = list.length;
+    let paginatedList = list;
+    if (filters.page && filters.limit) {
+      const from = (filters.page - 1) * filters.limit;
+      paginatedList = list.slice(from, from + filters.limit);
+    } else if (filters.limit) {
+      paginatedList = list.slice(0, filters.limit);
+    }
+
+    return {
+      properties: paginatedList,
+      totalCount,
+    };
   },
 
   async getRelatedProperties(property: Property, limit = 6): Promise<Property[]> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbPropId = toUUID(property.id);
+      const dbCommId = toUUID(property.communityId);
+      const dbDevId = property.developerId ? toUUID(property.developerId) : null;
+      
+      let query = supabase
+        .from("properties")
+        .select("*, community:communities(*), developer:developers(*), agent:agents(*)")
+        .neq("id", dbPropId);
+
+      const orClauses = [`type.eq.${property.type}`, `community_id.eq.${dbCommId}`];
+      if (dbDevId) {
+        orClauses.push(`developer_id.eq.${dbDevId}`);
+      }
+      query = query.or(orClauses.join(",")).limit(limit);
+
+      const { data, error } = await query;
+      if (!error && data) {
+        return (data as any[]).map(mapPropertyFromDB);
+      }
+      if (error) console.error("Supabase getRelatedProperties error:", error.message);
+    }
     const all = await this.getProperties();
     return all
       .filter(p => p.id !== property.id)
@@ -5673,17 +5789,38 @@ export const db = {
     return true;
   },
 
-  // Developers CRUD
-  async getDevelopers(): Promise<Developer[]> {
+  async getDevelopers(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[] }): Promise<Developer[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const { data, error } = await supabase.from("developers").select("*");
+      let query = supabase.from("developers").select("*");
+      if (filters) {
+        if (filters.slug) query = query.eq("slug", filters.slug);
+        if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
+        if (filters.id) query = query.eq("id", toUUID(filters.id));
+        if (filters.ids && filters.ids.length > 0) query = query.in("id", filters.ids.map(toUUID));
+        if (filters.search) {
+          const q = `%${filters.search}%`;
+          query = query.or(`name.ilike.${q},description.ilike.${q}`);
+        }
+      }
+      const { data, error } = await query;
       if (!error && data) {
         return (data as any[]).map(mapDeveloperFromDB);
       }
       if (error) console.error("Supabase getDevelopers error:", error.message);
     }
-    return mockDB.get<Developer>("developers");
+    let list = mockDB.get<Developer>("developers");
+    if (filters) {
+      if (filters.slug) list = list.filter(d => d.slug === filters.slug);
+      if (filters.isFeatured !== undefined) list = list.filter(d => d.isFeatured === filters.isFeatured);
+      if (filters.id) list = list.filter(d => d.id === filters.id);
+      if (filters.ids && filters.ids.length > 0) list = list.filter(d => filters.ids!.includes(d.id));
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        list = list.filter(d => d.name.toLowerCase().includes(q) || (d.description && d.description.toLowerCase().includes(q)));
+      }
+    }
+    return list;
   },
 
   async createDeveloper(developer: Omit<Developer, "id" | "createdAt" | "updatedAt">): Promise<Developer> {
@@ -5756,20 +5893,41 @@ export const db = {
     return true;
   },
 
-  // Communities CRUD
-  async getCommunities(): Promise<Community[]> {
+  async getCommunities(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[] }): Promise<Community[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const { data, error } = await supabase.from("communities").select("*");
+      let query = supabase.from("communities").select("*");
+      if (filters) {
+        if (filters.slug) query = query.eq("slug", filters.slug);
+        if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
+        if (filters.id) query = query.eq("id", toUUID(filters.id));
+        if (filters.ids && filters.ids.length > 0) query = query.in("id", filters.ids.map(toUUID));
+        if (filters.search) {
+          const q = `%${filters.search}%`;
+          query = query.or(`name.ilike.${q},description.ilike.${q}`);
+        }
+      }
+      const { data, error } = await query;
       if (!error && data) {
         return (data as any[]).map(mapCommunityFromDB);
       }
       if (error) console.error("Supabase getCommunities error:", error.message);
     }
-    return mockDB.get<Community>("communities").map(c => ({
+    let list = mockDB.get<Community>("communities").map(c => ({
       ...c,
       bannerUrl: mapPngToWebp(c.bannerUrl)
     }));
+    if (filters) {
+      if (filters.slug) list = list.filter(c => c.slug === filters.slug);
+      if (filters.isFeatured !== undefined) list = list.filter(c => c.isFeatured === filters.isFeatured);
+      if (filters.id) list = list.filter(c => c.id === filters.id);
+      if (filters.ids && filters.ids.length > 0) list = list.filter(c => filters.ids!.includes(c.id));
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        list = list.filter(c => c.name.toLowerCase().includes(q) || (c.description && c.description.toLowerCase().includes(q)));
+      }
+    }
+    return list;
   },
 
   async createCommunity(community: Omit<Community, "id" | "createdAt" | "updatedAt">): Promise<Community> {
@@ -5841,17 +5999,42 @@ export const db = {
     return true;
   },
 
-  // Agents CRUD
-  async getAgents(): Promise<Agent[]> {
+  async getAgents(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[] }): Promise<Agent[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const { data, error } = await supabase.from("agents").select("*");
+      let query = supabase.from("agents").select("*");
+      if (filters) {
+        if (filters.slug) query = query.eq("slug", filters.slug);
+        if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
+        if (filters.id) query = query.eq("id", toUUID(filters.id));
+        if (filters.ids && filters.ids.length > 0) query = query.in("id", filters.ids.map(toUUID));
+        if (filters.search) {
+          const q = `%${filters.search}%`;
+          query = query.or(`name.ilike.${q},title.ilike.${q},bio.ilike.${q}`);
+        }
+      }
+      const { data, error } = await query;
       if (!error && data) {
         return (data as any[]).map(mapAgentFromDB);
       }
       if (error) console.error("Supabase getAgents error:", error.message);
     }
-    return mockDB.get<Agent>("agents");
+    let list = mockDB.get<Agent>("agents");
+    if (filters) {
+      if (filters.slug) list = list.filter(a => a.slug === filters.slug);
+      if (filters.isFeatured !== undefined) list = list.filter(a => a.isFeatured === filters.isFeatured);
+      if (filters.id) list = list.filter(a => a.id === filters.id);
+      if (filters.ids && filters.ids.length > 0) list = list.filter(a => filters.ids!.includes(a.id));
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        list = list.filter(a =>
+          a.name.toLowerCase().includes(q) ||
+          a.title.toLowerCase().includes(q) ||
+          (a.bio && a.bio.toLowerCase().includes(q))
+        );
+      }
+    }
+    return list;
   },
 
   async createAgent(agent: Omit<Agent, "id" | "createdAt" | "updatedAt">): Promise<Agent> {
@@ -5931,15 +6114,95 @@ export const db = {
 
   // Blogs CMS CRUD
   async getBlogs(): Promise<BlogPost[]> {
+    const res = await this.getBlogsByFilters();
+    return res.blogs;
+  },
+
+  async getBlogsByFilters(filters?: {
+    slug?: string;
+    category?: string;
+    tag?: string;
+    search?: string;
+    status?: string;
+    isFeaturedArticle?: boolean;
+    page?: number;
+    limit?: number;
+    isSummary?: boolean;
+  }): Promise<{ blogs: BlogPost[]; totalCount: number }> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const { data, error } = await supabase.from("blogs").select("*");
-      if (!error && data) {
-        return (data as any[]).map(mapBlogFromDB);
+      const selectStr = filters?.isSummary
+        ? "id, title, slug, summary, cover_image, author_id, tags, reading_time, published_at, is_published, status, is_featured_article, category, created_at, updated_at"
+        : "*";
+
+      let query = supabase.from("blogs").select(selectStr, { count: "exact" });
+
+      if (filters) {
+        if (filters.slug) query = query.eq("slug", filters.slug);
+        if (filters.category && filters.category !== "All") query = query.eq("category", filters.category);
+        if (filters.tag) query = query.contains("tags", [filters.tag]);
+        if (filters.status) query = query.eq("status", filters.status);
+        if (filters.isFeaturedArticle !== undefined) query = query.eq("is_featured_article", filters.isFeaturedArticle);
+        if (filters.search) {
+          const q = `%${filters.search}%`;
+          query = query.or(`title.ilike.${q},summary.ilike.${q}`);
+        }
       }
-      if (error) console.error("Supabase getBlogs error:", error.message);
+
+      // Default sorting: published_at desc
+      query = query.order("published_at", { ascending: false, nullsFirst: false });
+
+      if (filters) {
+        if (filters.page && filters.limit) {
+          const from = (filters.page - 1) * filters.limit;
+          const to = from + filters.limit - 1;
+          query = query.range(from, to);
+        } else if (filters.limit) {
+          query = query.limit(filters.limit);
+        }
+      }
+
+      const { data, error, count } = await query;
+      if (!error && data) {
+        return {
+          blogs: (data as any[]).map(mapBlogFromDB),
+          totalCount: count || data.length,
+        };
+      }
+      if (error) console.error("Supabase getBlogsByFilters error:", error.message);
     }
-    return mockDB.get<BlogPost>("blogs");
+
+    // Fallback Mock DB query path
+    let list = mockDB.get<BlogPost>("blogs");
+    if (filters) {
+      if (filters.slug) list = list.filter(b => b.slug === filters.slug);
+      if (filters.category && filters.category !== "All") list = list.filter(b => b.category === filters.category);
+      if (filters.tag) list = list.filter(b => b.tags && b.tags.includes(filters.tag!));
+      if (filters.status) list = list.filter(b => b.status === filters.status);
+      if (filters.isFeaturedArticle !== undefined) list = list.filter(b => b.isFeaturedArticle === filters.isFeaturedArticle);
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        list = list.filter(b => b.title.toLowerCase().includes(q) || b.summary.toLowerCase().includes(q));
+      }
+    }
+
+    list.sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
+
+    const totalCount = list.length;
+    let paginatedList = list;
+    if (filters) {
+      if (filters.page && filters.limit) {
+        const from = (filters.page - 1) * filters.limit;
+        paginatedList = list.slice(from, from + filters.limit);
+      } else if (filters.limit) {
+        paginatedList = list.slice(0, filters.limit);
+      }
+    }
+
+    return {
+      blogs: paginatedList,
+      totalCount,
+    };
   },
 
   async createBlog(blog: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {

@@ -74,6 +74,7 @@ function PropertyListingPageContent({
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     async function loadStaticData() {
@@ -91,6 +92,16 @@ function PropertyListingPageContent({
     loadStaticData();
   }, []);
 
+  const [prevFiltersKey, setPrevFiltersKey] = useState("");
+
+  useEffect(() => {
+    const currentFiltersKey = JSON.stringify({ activeFilters, searchQuery, sortOption });
+    if (prevFiltersKey !== currentFiltersKey) {
+      setPrevFiltersKey(currentFiltersKey);
+      setCurrentPage(1);
+    }
+  }, [activeFilters, searchQuery, sortOption, prevFiltersKey]);
+
   useEffect(() => {
     async function fetchProperties() {
       setLoading(true);
@@ -99,10 +110,13 @@ function PropertyListingPageContent({
           ...activeFilters,
           search: searchQuery || undefined,
           sort: sortOption,
+          page: currentPage,
+          limit: itemsPerPage,
+          isSummary: true,
         };
-        const data = await db.getPropertiesByFilters(filters);
-        setProperties(data);
-        setCurrentPage(1); // reset to page 1 on filter changes
+        const res = await db.getPropertiesByFilters(filters);
+        setProperties(res.properties);
+        setTotalItems(res.totalCount);
       } catch (err) {
         console.error("Error loading properties:", err);
       } finally {
@@ -110,7 +124,7 @@ function PropertyListingPageContent({
       }
     }
     fetchProperties();
-  }, [activeFilters, searchQuery, sortOption]);
+  }, [prevFiltersKey, currentPage]);
 
   const handleFilterApply = (filters: Record<string, string | number | boolean | undefined>) => {
     setActiveFilters({
@@ -127,10 +141,9 @@ function PropertyListingPageContent({
   };
 
   // Pagination bounds
-  const totalItems = properties.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProperties = properties.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedProperties = properties;
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },

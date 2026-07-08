@@ -28,19 +28,18 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
     async function loadCommunityData() {
       try {
         setLoading(true);
-        const [comms, props, ags] = await Promise.all([
-          db.getCommunities(),
-          db.getProperties(),
-          db.getAgents(),
-        ]);
+        const comms = await db.getCommunities({ slug: resolvedParams.slug });
+        const currentComm = comms[0];
 
-        const currentComm = comms.find((c) => c.slug === resolvedParams.slug);
         if (currentComm) {
           setCommunity(currentComm);
           
-          // Filter properties
-          const commProps = props.filter((p) => p.communityId === currentComm.id);
-          setProperties(commProps);
+          const [propsRes, ags] = await Promise.all([
+            db.getPropertiesByFilters({ community: currentComm.id, isSummary: true }),
+            db.getAgents(),
+          ]);
+
+          setProperties(propsRes.properties);
 
           // Find agents who specialize in this community
           const commAgs = ags.filter((a) =>

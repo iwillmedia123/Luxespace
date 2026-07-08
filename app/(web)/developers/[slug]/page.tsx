@@ -33,22 +33,20 @@ export default function DeveloperDetailPage({ params }: DeveloperDetailPageProps
     async function loadDeveloperData() {
       try {
         setLoading(true);
-        const [devs, props, comms] = await Promise.all([
-          db.getDevelopers(),
-          db.getProperties(),
-          db.getCommunities(),
-        ]);
+        const devs = await db.getDevelopers({ slug: resolvedParams.slug });
+        const currentDev = devs[0];
 
-        const currentDev = devs.find((d) => d.slug === resolvedParams.slug);
         if (currentDev) {
           setDeveloper(currentDev);
-          // Filter properties
-          const devProps = props.filter((p) => p.developerId === currentDev.id);
+          
+          const propsRes = await db.getPropertiesByFilters({ developer: currentDev.id, isSummary: true });
+          const devProps = propsRes.properties;
           setProperties(devProps);
 
-          // Find communities where developer operates
           const commIds = devProps.map((p) => p.communityId);
-          const devComms = comms.filter((c) => commIds.includes(c.id));
+          const devComms = commIds.length > 0 
+            ? await db.getCommunities({ ids: commIds })
+            : [];
           setCommunities(devComms);
         }
       } catch (err) {

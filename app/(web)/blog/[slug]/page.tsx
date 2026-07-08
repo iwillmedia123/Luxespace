@@ -13,41 +13,40 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const blogs = await db.getBlogs();
-  const post = blogs.find((b) => b.slug === slug);
+  const res = await db.getBlogsByFilters({ slug });
+  const post = res.blogs[0];
   if (!post) return {};
   return generateBlogMetadata(post);
 }
 
 export default async function BlogDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const [blogsList, agentsList, propsList, commsList, devsList] = await Promise.all([
-    db.getBlogs(),
-    db.getAgents(),
-    db.getProperties(),
-    db.getCommunities(),
-    db.getDevelopers(),
-  ]);
-
-  const post = blogsList.find((b) => b.slug === slug);
+  
+  const currentBlogRes = await db.getBlogsByFilters({ slug });
+  const post = currentBlogRes.blogs[0];
   if (!post) {
     notFound();
   }
 
-  const author = agentsList.find((a) => a.id === post.authorId) || null;
-  const publishedBlogs = blogsList.filter(b => b.status === "published" || b.isPublished);
+  const [agentsList, propsRes, commsList, devsList, blogsRes] = await Promise.all([
+    db.getAgents({ id: post.authorId }),
+    post.relatedProperties && post.relatedProperties.length > 0
+      ? db.getPropertiesByFilters({ ids: post.relatedProperties, isSummary: true })
+      : Promise.resolve({ properties: [], totalCount: 0 }),
+    post.relatedCommunities && post.relatedCommunities.length > 0
+      ? db.getCommunities({ ids: post.relatedCommunities })
+      : Promise.resolve([]),
+    post.relatedDevelopers && post.relatedDevelopers.length > 0
+      ? db.getDevelopers({ ids: post.relatedDevelopers })
+      : Promise.resolve([]),
+    db.getBlogsByFilters({ status: "published", limit: 10, isSummary: true }),
+  ]);
 
-  const relatedPropertiesData = post.relatedProperties
-    ? propsList.filter((p) => post.relatedProperties!.includes(p.id))
-    : [];
-
-  const relatedCommunitiesData = post.relatedCommunities
-    ? commsList.filter((c) => post.relatedCommunities!.includes(c.id))
-    : [];
-
-  const relatedDevelopersData = post.relatedDevelopers
-    ? devsList.filter((d) => post.relatedDevelopers!.includes(d.id))
-    : [];
+  const author = agentsList[0] || null;
+  const publishedBlogs = blogsRes.blogs;
+  const relatedPropertiesData = propsRes.properties;
+  const relatedCommunitiesData = commsList;
+  const relatedDevelopersData = devsList;
 
   return (
     <>

@@ -39,19 +39,37 @@ export default function BlogPage() {
     "Visa & Residency"
   ];
 
+  const [totalItems, setTotalItems] = useState(0);
+  const [prevFiltersKey, setPrevFiltersKey] = useState("");
+
   useEffect(() => {
-    async function loadData() {
+    const currentFiltersKey = JSON.stringify({ selectedCategory, selectedTag, search });
+    if (prevFiltersKey !== currentFiltersKey) {
+      setPrevFiltersKey(currentFiltersKey);
+      setCurrentPage(1);
+    }
+  }, [selectedCategory, selectedTag, search, prevFiltersKey]);
+
+  useEffect(() => {
+    async function loadBlogs() {
+      setLoading(true);
       try {
-        const [bls, ags, cats] = await Promise.all([
-          db.getBlogs(),
+        const filters = {
+          category: selectedCategory !== "All" ? selectedCategory : undefined,
+          tag: selectedTag || undefined,
+          search: search || undefined,
+          status: "published",
+          page: currentPage,
+          limit: postsPerPage,
+          isSummary: true,
+        };
+        const [res, ags, cats] = await Promise.all([
+          db.getBlogsByFilters(filters),
           db.getAgents(),
           db.getBlogCategories(),
         ]);
-        // Only show published blogs on public pages
-        const publishedBlogs = bls
-          .filter(b => b.status === "published" || b.isPublished)
-          .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
-        setBlogs(publishedBlogs);
+        setBlogs(res.blogs);
+        setTotalItems(res.totalCount);
         setAgents(ags);
         if (cats && cats.length > 0) {
           setDbCategories(["All", ...cats.map(c => c.name)]);
@@ -62,20 +80,11 @@ export default function BlogPage() {
         setLoading(false);
       }
     }
-    loadData();
-  }, []);
+    loadBlogs();
+  }, [prevFiltersKey, currentPage]);
 
-  // Filter logic
-  const filtered = blogs.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.summary.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || post.category === selectedCategory;
-    const matchesTag =
-      !selectedTag || (post.tags && post.tags.includes(selectedTag));
-    return matchesSearch && matchesCategory && matchesTag;
-  });
+  // Filter logic (already filtered on server, but fallback is defined)
+  const filtered = blogs;
 
   // Extract all unique tags
   const allTags = Array.from(
@@ -83,13 +92,11 @@ export default function BlogPage() {
   ).slice(0, 15);
 
   // Pagination logic
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filtered.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filtered.length / postsPerPage);
+  const totalPages = Math.ceil(totalItems / postsPerPage);
+  const currentPosts = blogs;
 
   const featuredArticle = blogs.find((b) => b.isFeaturedArticle) || blogs[0];
-  const latestArticles = currentPosts.filter((p) => p.id !== featuredArticle?.id);
+  const latestArticles = blogs.filter((p) => p.id !== featuredArticle?.id);
 
   const getAuthorName = (authorId: string) => {
     const agent = agents.find((a) => a.id === authorId);

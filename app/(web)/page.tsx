@@ -351,19 +351,22 @@ export default async function HomePage() {
   let blogsToShow = MOCK_BLOGS;
 
   try {
-    const [dbProperties, dbLatestProperties, dbCommunities, dbBlogs] = await Promise.all([
-      db.getPropertiesByFilters({ isFeatured: true }),
-      db.getPropertiesByFilters({ sort: "newest" }),
+    const [featuredRes, newestRes, dbCommunities, dbBlogs] = await Promise.all([
+      db.getPropertiesByFilters({ isFeatured: true, limit: 4, isSummary: true }),
+      db.getPropertiesByFilters({ sort: "newest", limit: 4, isSummary: true }),
       db.getCommunities(),
       db.getBlogs(),
     ]);
 
+    const dbProperties = featuredRes.properties;
+    const dbLatestProperties = newestRes.properties;
+
     if (dbProperties && dbProperties.length > 0) {
-      propertiesToShow = dbProperties.slice(0, 4);
+      propertiesToShow = dbProperties;
     }
 
     if (dbLatestProperties && dbLatestProperties.length > 0) {
-      latestPropertiesToShow = dbLatestProperties.slice(0, 4);
+      latestPropertiesToShow = dbLatestProperties;
     }
     
     const featuredComms = dbCommunities ? dbCommunities.filter((c) => c.isFeatured) : [];

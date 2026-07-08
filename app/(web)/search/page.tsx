@@ -59,60 +59,20 @@ function SearchResultsContent() {
 
       try {
         setLoading(true);
-        const q = query.toLowerCase();
 
-        const [propsList, devsList, commsList, agsList, blogsList] = await Promise.all([
-          db.getProperties(),
-          db.getDevelopers(),
-          db.getCommunities(),
-          db.getAgents(),
-          db.getBlogs(),
+        const [propsRes, devsRes, commsRes, agsRes, blogsRes] = await Promise.all([
+          db.getPropertiesByFilters({ search: query, isSummary: true }),
+          db.getDevelopers({ search: query }),
+          db.getCommunities({ search: query }),
+          db.getAgents({ search: query }),
+          db.getBlogsByFilters({ search: query, status: "published", isSummary: true }),
         ]);
 
-        // Filter Properties
-        const filteredProps = propsList.filter(
-          (p) =>
-            matchQuery(p.title, q) ||
-            matchQuery(p.location, q) ||
-            matchQuery(p.description, q)
-        );
-        setProperties(filteredProps);
-
-        // Filter Developers
-        const filteredDevs = devsList.filter(
-          (d) =>
-            matchQuery(d.name, q) ||
-            (d.description && matchQuery(d.description, q))
-        );
-        setDevelopers(filteredDevs);
-
-        // Filter Communities
-        const filteredComms = commsList.filter(
-          (c) =>
-            matchQuery(c.name, q) ||
-            (c.description && matchQuery(c.description, q))
-        );
-        setCommunities(filteredComms);
-
-        // Filter Agents
-        const filteredAgs = agsList.filter(
-          (a) =>
-            matchQuery(a.name, q) ||
-            matchQuery(a.title, q) ||
-            (a.bio && matchQuery(a.bio, q)) ||
-            a.specialization.some((s) => matchQuery(s, q))
-        );
-        setAgents(filteredAgs);
-
-        // Filter Blogs
-        const publishedBlogs = blogsList.filter((b) => b.status === "published" || b.isPublished);
-        const filteredBlogs = publishedBlogs.filter(
-          (b) =>
-            matchQuery(b.title, q) ||
-            matchQuery(b.summary, q) ||
-            matchQuery(b.content, q)
-        );
-        setBlogs(filteredBlogs);
+        setProperties(propsRes.properties);
+        setDevelopers(devsRes);
+        setCommunities(commsRes);
+        setAgents(agsRes);
+        setBlogs(blogsRes.blogs);
 
       } catch (err) {
         console.error("Global search error:", err);

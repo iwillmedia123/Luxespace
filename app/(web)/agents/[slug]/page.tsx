@@ -32,16 +32,13 @@ export default function AgentDetailPage({ params }: AgentDetailPageProps) {
     async function loadAgentData() {
       try {
         setLoading(true);
-        const [ags, props] = await Promise.all([
-          db.getAgents(),
-          db.getProperties(),
-        ]);
+        const ags = await db.getAgents({ slug: resolvedParams.slug });
+        const currentAgent = ags[0];
 
-        const currentAgent = ags.find((a) => a.slug === resolvedParams.slug);
         if (currentAgent) {
           setAgent(currentAgent);
-          const agentProps = props.filter((p) => p.agentId === currentAgent.id);
-          setProperties(agentProps);
+          const propsRes = await db.getPropertiesByFilters({ agent: currentAgent.id, isSummary: true });
+          setProperties(propsRes.properties);
         }
       } catch (err) {
         console.error("Error loading agent details:", err);
