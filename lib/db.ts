@@ -5573,12 +5573,12 @@ export const db = {
 
       // Sorting
       switch (filters.sort) {
-        case "price-asc": query = query.order("price", { ascending: true }); break;
-        case "price-desc": query = query.order("price", { ascending: false }); break;
-        case "newest": query = query.order("created_at", { ascending: false }); break;
-        case "area-desc": query = query.order("area_sqft", { ascending: false }); break;
-        case "featured": query = query.order("is_featured", { ascending: false }); break;
-        default: query = query.order("is_featured", { ascending: false });
+        case "price-asc": query = query.order("price", { ascending: true }).order("id", { ascending: true }); break;
+        case "price-desc": query = query.order("price", { ascending: false }).order("id", { ascending: true }); break;
+        case "newest": query = query.order("created_at", { ascending: false }).order("id", { ascending: true }); break;
+        case "area-desc": query = query.order("area_sqft", { ascending: false }).order("id", { ascending: true }); break;
+        case "featured": query = query.order("is_featured", { ascending: false }).order("id", { ascending: true }); break;
+        default: query = query.order("is_featured", { ascending: false }).order("id", { ascending: true });
       }
 
       // Pagination
@@ -6150,7 +6150,7 @@ export const db = {
       }
 
       // Default sorting: published_at desc
-      query = query.order("published_at", { ascending: false, nullsFirst: false });
+      query = query.order("published_at", { ascending: false, nullsFirst: false }).order("id", { ascending: true });
 
       if (filters) {
         if (filters.page && filters.limit) {

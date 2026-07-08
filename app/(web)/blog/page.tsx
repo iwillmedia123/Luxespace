@@ -83,6 +83,10 @@ export default function BlogPage() {
     loadBlogs();
   }, [prevFiltersKey, currentPage]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   // Filter logic (already filtered on server, but fallback is defined)
   const filtered = blogs;
 

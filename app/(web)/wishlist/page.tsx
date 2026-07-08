@@ -11,7 +11,7 @@ import PropertySkeleton from "@/components/properties/PropertySkeleton";
 import Button from "@/components/ui/Button";
 
 export default function WishlistPage() {
-  const { favourites, count } = useFavourites();
+  const { favourites, count, setFavouritesList } = useFavourites();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,9 +24,15 @@ export default function WishlistPage() {
           return;
         }
 
-        const all = await db.getProperties();
-        const filtered = all.filter((p) => favourites.includes(p.id));
-        setProperties(filtered);
+        const res = await db.getPropertiesByFilters({ ids: favourites, isSummary: true });
+        setProperties(res.properties);
+
+        // Check if any stored IDs no longer exist in the database and prune them
+        const returnedIds = res.properties.map((p) => p.id);
+        const validFavourites = favourites.filter((id) => returnedIds.includes(id));
+        if (validFavourites.length !== favourites.length) {
+          setFavouritesList(validFavourites);
+        }
       } catch (err) {
         console.error("Error loading wishlist:", err);
       } finally {
@@ -34,7 +40,7 @@ export default function WishlistPage() {
       }
     }
     loadWishlist();
-  }, [favourites]);
+  }, [favourites, setFavouritesList]);
 
   return (
     <main className="min-h-screen bg-[#1f232c] pt-28 pb-20 px-4 relative overflow-hidden">

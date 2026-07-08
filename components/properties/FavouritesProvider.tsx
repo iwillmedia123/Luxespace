@@ -7,6 +7,7 @@ interface FavouritesContextType {
   isFavourite: (id: string) => boolean;
   toggleFavourite: (id: string) => void;
   count: number;
+  setFavouritesList: (list: string[]) => void;
 }
 
 const FavouritesContext = createContext<FavouritesContextType | undefined>(undefined);
@@ -42,6 +43,11 @@ export function FavouritesProvider({ children }: { children: React.ReactNode }) 
     localStorage.setItem("luxespace_favourites", JSON.stringify(updated));
   };
 
+  const setFavouritesList = (list: string[]) => {
+    setFavourites(list);
+    localStorage.setItem("luxespace_favourites", JSON.stringify(list));
+  };
+
   return (
     <FavouritesContext.Provider
       value={{
@@ -49,6 +55,7 @@ export function FavouritesProvider({ children }: { children: React.ReactNode }) 
         isFavourite,
         toggleFavourite,
         count: favourites.length,
+        setFavouritesList,
       }}
     >
       {children}
