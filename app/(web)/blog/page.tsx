@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ChevronRight, Calendar, ArrowRight, BookOpen, Clock, Tag } from "lucide-react";
+import { Search, ChevronRight, Calendar, ArrowRight, BookOpen, Clock, Tag, ChevronDown } from "lucide-react";
 import { db } from "@/lib/db";
 import { BlogPost, Agent } from "@/types";
 import Typography from "@/components/ui/Typography";
 import BlogCard from "@/components/cards/BlogCard";
 import NewsletterSection from "@/components/layout/NewsletterSection";
+import Button from "@/components/ui/Button";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -68,7 +69,15 @@ export default function BlogPage() {
           db.getAgents(),
           db.getBlogCategories(),
         ]);
-        setBlogs(res.blogs);
+        if (currentPage === 1) {
+          setBlogs(res.blogs);
+        } else {
+          setBlogs((prev) => {
+            const existingIds = new Set(prev.map((b) => b.id));
+            const uniqueNew = res.blogs.filter((b) => !existingIds.has(b.id));
+            return [...prev, ...uniqueNew];
+          });
+        }
         setTotalItems(res.totalCount);
         setAgents(ags);
         if (cats && cats.length > 0) {
@@ -83,10 +92,6 @@ export default function BlogPage() {
     loadBlogs();
   }, [prevFiltersKey, currentPage]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [currentPage]);
-
   // Filter logic (already filtered on server, but fallback is defined)
   const filtered = blogs;
 
@@ -96,7 +101,6 @@ export default function BlogPage() {
   ).slice(0, 15);
 
   // Pagination logic
-  const totalPages = Math.ceil(totalItems / postsPerPage);
   const currentPosts = blogs;
 
   const featuredArticle = blogs.find((b) => b.isFeaturedArticle) || blogs[0];
@@ -302,24 +306,22 @@ export default function BlogPage() {
                       {currentPosts.map((post) => (
                         <BlogCard key={post.id} post={post} />
                       ))}
+                      {loading && currentPage > 1 && Array.from({ length: 2 }).map((_, idx) => (
+                        <div key={`skeleton-${idx}`} className="animate-pulse bg-luxury-dark border border-luxury-border/30 rounded-2xl h-[420px] w-full" />
+                      ))}
                     </div>
 
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                      <div className="flex justify-center gap-2 pt-6 select-none">
-                        {Array.from({ length: totalPages }).map((_, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => setCurrentPage(idx + 1)}
-                            className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
-                              currentPage === idx + 1
-                                ? "bg-luxury-gold border-luxury-gold text-luxury-charcoal font-bold"
-                                : "border-luxury-border/30 text-gray-400 hover:text-white"
-                            }`}
-                          >
-                            {idx + 1}
-                          </button>
-                        ))}
+                    {/* Load More Button */}
+                    {!loading && blogs.length < totalItems && (
+                      <div className="pt-12 flex justify-center">
+                        <Button
+                          onClick={() => setCurrentPage((prev) => prev + 1)}
+                          variant="primary"
+                          className="px-8 py-3.5 text-xs tracking-widest font-semibold flex items-center gap-2 group cursor-pointer"
+                        >
+                          <span>Load More Articles</span>
+                          <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-300" />
+                        </Button>
                       </div>
                     )}
                   </>
