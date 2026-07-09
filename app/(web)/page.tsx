@@ -1,7 +1,7 @@
 // Revert decrypted text animation
 import { Metadata } from "next";
 import Link from "next/link";
-import { db } from "@/lib/db";
+import { db, isSupabaseConfigured } from "@/lib/db";
 import { Shield, Key, Landmark, BadgeCheck, Compass, HelpCircle } from "lucide-react";
 import { Property, Community, BlogPost } from "@/types";
 import HeroScroll from "@/components/layout/HeroScroll";
@@ -360,28 +360,37 @@ export default async function HomePage() {
 
     const dbProperties = featuredRes.properties;
     const dbLatestProperties = newestRes.properties;
-
-    if (dbProperties && dbProperties.length > 0) {
-      propertiesToShow = dbProperties;
-    }
-
-    if (dbLatestProperties && dbLatestProperties.length > 0) {
-      latestPropertiesToShow = dbLatestProperties;
-    }
-    
     const featuredComms = dbCommunities ? dbCommunities.filter((c) => c.isFeatured) : [];
-    if (featuredComms.length > 0) {
-      communitiesToShow = featuredComms.slice(0, 4);
-    }
 
-    if (dbBlogs && dbBlogs.length > 0) {
-      const published = dbBlogs
+    const isDb = isSupabaseConfigured();
+
+    if (isDb) {
+      propertiesToShow = dbProperties || [];
+      latestPropertiesToShow = dbLatestProperties || [];
+      communitiesToShow = featuredComms.slice(0, 4);
+      blogsToShow = (dbBlogs || [])
         .filter((b) => b.status === "published" || b.isPublished)
-        .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
-      if (published.length > 0) {
-        blogsToShow = published.slice(0, 4);
-      } else {
-        blogsToShow = [];
+        .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
+        .slice(0, 4);
+    } else {
+      if (dbProperties && dbProperties.length > 0) {
+        propertiesToShow = dbProperties;
+      }
+      if (dbLatestProperties && dbLatestProperties.length > 0) {
+        latestPropertiesToShow = dbLatestProperties;
+      }
+      if (featuredComms.length > 0) {
+        communitiesToShow = featuredComms.slice(0, 4);
+      }
+      if (dbBlogs && dbBlogs.length > 0) {
+        const published = dbBlogs
+          .filter((b) => b.status === "published" || b.isPublished)
+          .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
+        if (published.length > 0) {
+          blogsToShow = published.slice(0, 4);
+        } else {
+          blogsToShow = [];
+        }
       }
     }
   } catch (err) {

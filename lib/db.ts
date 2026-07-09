@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase";
 import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber, BlogCategory } from "@/types";
 
 // Determine if we have live Supabase credentials configured
-const isSupabaseConfigured = () => {
+export const isSupabaseConfigured = () => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   return url.length > 0 && key.length > 0;
