@@ -6466,13 +6466,16 @@ export const db = {
   async getLeads(): Promise<Lead[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const { data, error } = await supabase.from("leads").select("*");
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (!error && data) {
         return (data as any[]).map(mapLeadFromDB);
       }
       if (error) console.error("Supabase getLeads error:", error.message);
     }
-    return mockDB.get<Lead>("leads");
+    return mockDB.get<Lead>("leads").sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   },
 
   async createLead(lead: Omit<Lead, "id" | "createdAt" | "updatedAt">): Promise<Lead> {

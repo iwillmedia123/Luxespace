@@ -15,6 +15,7 @@ export default function LeadsCRMPage() {
   
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
 
   // Editing lead state drawer
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -125,12 +126,32 @@ export default function LeadsCRMPage() {
     document.body.removeChild(link);
   };
 
-  const filtered = leads.filter((l) => {
-    const fullName = `${l.firstName} ${l.lastName}`.toLowerCase();
-    const matchesSearch = fullName.includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === "" || l.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filtered = leads
+    .filter((l) => {
+      const fullName = `${l.firstName} ${l.lastName}`.toLowerCase();
+      const matchesSearch = fullName.includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase());
+      const matchesStatus = statusFilter === "" || l.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      if (sortBy === "newest") {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      if (sortBy === "oldest") {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+      if (sortBy === "name-asc") {
+        const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+        const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+        return nameA.localeCompare(nameB);
+      }
+      if (sortBy === "name-desc") {
+        const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+        const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+        return nameB.localeCompare(nameA);
+      }
+      return 0;
+    });
 
   return (
     <div className="space-y-6">
@@ -169,18 +190,31 @@ export default function LeadsCRMPage() {
           />
         </div>
 
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full md:w-48 bg-luxury-charcoal border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none appearance-none cursor-pointer"
-        >
-          <option value="">All Statuses</option>
-          <option value="new">New Enquiry</option>
-          <option value="contacted">Contacted</option>
-          <option value="qualified">Qualified</option>
-          <option value="won">Won (Deal Closed)</option>
-          <option value="lost">Lost</option>
-        </select>
+        <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full md:w-44 bg-luxury-charcoal border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none appearance-none cursor-pointer"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name-asc">Client Name (A - Z)</option>
+            <option value="name-desc">Client Name (Z - A)</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="w-full md:w-44 bg-luxury-charcoal border border-luxury-border/40 focus:border-luxury-gold/50 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none appearance-none cursor-pointer"
+          >
+            <option value="">All Statuses</option>
+            <option value="new">New Enquiry</option>
+            <option value="contacted">Contacted</option>
+            <option value="qualified">Qualified</option>
+            <option value="won">Won (Deal Closed)</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
       </div>
 
       {/* Table list */}
