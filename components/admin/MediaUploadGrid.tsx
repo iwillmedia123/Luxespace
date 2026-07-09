@@ -1,7 +1,8 @@
 "use client";
-
 import { useState, useRef, useCallback } from "react";
 import { Upload, X, Film, ImageIcon, GripVertical } from "lucide-react";
+import { createClient } from "@/lib/supabase";
+import { isSupabaseConfigured } from "@/lib/db";
 
 interface MediaUploadProps {
   images: string[];
@@ -41,19 +42,52 @@ export default function MediaUploadGrid({
       setUploading(true);
 
       const newUrls: string[] = [];
+      const isDb = isSupabaseConfigured();
 
       for (const file of fileArray) {
         if (maxImages === 1) {
-          const url = await fileToDataUrl(file, 1200, 0.85);
-          newUrls.push(url);
+          if (isDb) {
+            try {
+              const supabase = createClient();
+              const fileExt = file.name.split(".").pop();
+              const fileName = `${crypto.randomUUID()}.${fileExt}`;
+              const filePath = `properties/${fileName}`;
+              const { error } = await supabase.storage.from("luxespace").upload(filePath, file);
+              if (error) throw error;
+              const { data: { publicUrl } } = supabase.storage.from("luxespace").getPublicUrl(filePath);
+              newUrls.push(publicUrl);
+            } catch (err: unknown) {
+              const msg = err instanceof Error ? err.message : String(err);
+              console.error("Storage upload error:", msg);
+              alert("Failed to upload image to storage: " + msg);
+            }
+          } else {
+            const url = await fileToDataUrl(file, 1200, 0.85);
+            newUrls.push(url);
+          }
           break;
         }
         if (images.length + newUrls.length >= maxImages) break;
 
-        // Compress + convert to base64 data URL (sandbox mode)
-        // In production with Supabase, this would upload to Storage bucket
-        const url = await fileToDataUrl(file, 1200, 0.85);
-        newUrls.push(url);
+        if (isDb) {
+          try {
+            const supabase = createClient();
+            const fileExt = file.name.split(".").pop();
+            const fileName = `${crypto.randomUUID()}.${fileExt}`;
+            const filePath = `properties/${fileName}`;
+            const { error } = await supabase.storage.from("luxespace").upload(filePath, file);
+            if (error) throw error;
+            const { data: { publicUrl } } = supabase.storage.from("luxespace").getPublicUrl(filePath);
+            newUrls.push(publicUrl);
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            console.error("Storage upload error:", msg);
+            alert("Failed to upload image to storage: " + msg);
+          }
+        } else {
+          const url = await fileToDataUrl(file, 1200, 0.85);
+          newUrls.push(url);
+        }
       }
 
       if (maxImages === 1 && newUrls.length > 0) {
@@ -77,12 +111,29 @@ export default function MediaUploadGrid({
       setUploading(true);
 
       const newUrls: string[] = [];
+      const isDb = isSupabaseConfigured();
 
       for (const file of fileArray) {
         if (videos.length + newUrls.length >= maxVideos) break;
-        // For videos, create object URL (blob) for preview; in production upload to Supabase Storage
-        const url = URL.createObjectURL(file);
-        newUrls.push(url);
+        if (isDb) {
+          try {
+            const supabase = createClient();
+            const fileExt = file.name.split(".").pop();
+            const fileName = `${crypto.randomUUID()}.${fileExt}`;
+            const filePath = `videos/${fileName}`;
+            const { error } = await supabase.storage.from("luxespace").upload(filePath, file);
+            if (error) throw error;
+            const { data: { publicUrl } } = supabase.storage.from("luxespace").getPublicUrl(filePath);
+            newUrls.push(publicUrl);
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            console.error("Storage video upload error:", msg);
+            alert("Failed to upload video to storage: " + msg);
+          }
+        } else {
+          const url = URL.createObjectURL(file);
+          newUrls.push(url);
+        }
       }
 
       onVideosChange([...videos, ...newUrls]);

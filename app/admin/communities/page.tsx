@@ -4,10 +4,11 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Search, Trash2, Edit, X, Upload } from "lucide-react";
-import { db } from "@/lib/db";
+import { db, isSupabaseConfigured } from "@/lib/db";
 import { Community } from "@/types";
 import Typography from "@/components/ui/Typography";
 import Button from "@/components/ui/Button";
+import { createClient } from "@/lib/supabase";
 
 function extractCoordinatesFromGoogleMapsLink(link: string): { lat: number; lng: number } | null {
   try {
@@ -114,19 +115,42 @@ export default function CommunitiesManagerPage() {
     }
   };
 
-  const handleFile = (file: File) => {
+  const handleFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file.");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      if (result) {
-        setBannerUrl(result);
+    const isDb = isSupabaseConfigured();
+    if (isDb) {
+      try {
+        const supabase = createClient();
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `communities/${fileName}`;
+        
+        // Show a temporary indicator
+        setBannerUrl("Uploading...");
+        
+        const { error } = await supabase.storage.from("luxespace").upload(filePath, file);
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage.from("luxespace").getPublicUrl(filePath);
+        setBannerUrl(publicUrl);
+      } catch (err: any) {
+        console.error("Storage upload error:", err.message);
+        alert("Failed to upload image to storage: " + err.message);
+        setBannerUrl("");
       }
-    };
-    reader.readAsDataURL(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        if (result) {
+          setBannerUrl(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
