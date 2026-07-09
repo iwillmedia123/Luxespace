@@ -351,16 +351,17 @@ export default async function HomePage() {
   let blogsToShow = MOCK_BLOGS;
 
   try {
-    const [featuredRes, newestRes, dbCommunities, dbBlogs] = await Promise.all([
+    const [featuredRes, newestRes, dbCommunities, dbBlogsRes] = await Promise.all([
       db.getPropertiesByFilters({ isFeatured: true, limit: 4, isSummary: true }),
       db.getPropertiesByFilters({ sort: "newest", limit: 4, isSummary: true }),
-      db.getCommunities(),
-      db.getBlogs(),
+      db.getCommunities({ isFeatured: true, isSummary: true, limit: 4 }),
+      db.getBlogsByFilters({ status: "published", isSummary: true, limit: 4 }),
     ]);
 
     const dbProperties = featuredRes.properties;
     const dbLatestProperties = newestRes.properties;
-    const featuredComms = dbCommunities ? dbCommunities.filter((c) => c.isFeatured) : [];
+    const featuredComms = dbCommunities || [];
+    const dbBlogs = dbBlogsRes.blogs;
 
     const isDb = isSupabaseConfigured();
 
@@ -368,10 +369,7 @@ export default async function HomePage() {
       propertiesToShow = dbProperties || [];
       latestPropertiesToShow = dbLatestProperties || [];
       communitiesToShow = featuredComms.slice(0, 4);
-      blogsToShow = (dbBlogs || [])
-        .filter((b) => b.status === "published" || b.isPublished)
-        .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
-        .slice(0, 4);
+      blogsToShow = (dbBlogs || []).slice(0, 4);
     } else {
       if (dbProperties && dbProperties.length > 0) {
         propertiesToShow = dbProperties;
@@ -383,14 +381,7 @@ export default async function HomePage() {
         communitiesToShow = featuredComms.slice(0, 4);
       }
       if (dbBlogs && dbBlogs.length > 0) {
-        const published = dbBlogs
-          .filter((b) => b.status === "published" || b.isPublished)
-          .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
-        if (published.length > 0) {
-          blogsToShow = published.slice(0, 4);
-        } else {
-          blogsToShow = [];
-        }
+        blogsToShow = dbBlogs.slice(0, 4);
       }
     }
   } catch (err) {

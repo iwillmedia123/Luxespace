@@ -5893,10 +5893,13 @@ export const db = {
     return true;
   },
 
-  async getCommunities(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[] }): Promise<Community[]> {
+  async getCommunities(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[]; isSummary?: boolean; limit?: number }): Promise<Community[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      let query = supabase.from("communities").select("*");
+      const selectStr = filters?.isSummary
+        ? "id, name, slug, description, banner_url, is_featured"
+        : "*";
+      let query = supabase.from("communities").select(selectStr);
       if (filters) {
         if (filters.slug) query = query.eq("slug", filters.slug);
         if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
@@ -5906,6 +5909,7 @@ export const db = {
           const q = `%${filters.search}%`;
           query = query.or(`name.ilike.${q},description.ilike.${q}`);
         }
+        if (filters.limit) query = query.limit(filters.limit);
       }
       const { data, error } = await query;
       if (!error && data) {
