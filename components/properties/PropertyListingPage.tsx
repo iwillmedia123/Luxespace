@@ -80,8 +80,8 @@ function PropertyListingPageContent({
     async function loadStaticData() {
       try {
         const [comms, devs] = await Promise.all([
-          db.getCommunities(),
-          db.getDevelopers(),
+          db.getCommunities({ isMinimal: true }),
+          db.getDevelopers({ isMinimal: true }),
         ]);
         setCommunities(comms);
         setDevelopers(devs);

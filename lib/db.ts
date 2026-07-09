@@ -5789,10 +5789,16 @@ export const db = {
     return true;
   },
 
-  async getDevelopers(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[] }): Promise<Developer[]> {
+  async getDevelopers(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[]; isSummary?: boolean; isMinimal?: boolean; limit?: number }): Promise<Developer[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      let query = supabase.from("developers").select("*");
+      let selectStr = "*";
+      if (filters?.isMinimal) {
+        selectStr = "id, name, slug";
+      } else if (filters?.isSummary) {
+        selectStr = "id, name, slug, logo_url, description, is_featured";
+      }
+      let query = supabase.from("developers").select(selectStr);
       if (filters) {
         if (filters.slug) query = query.eq("slug", filters.slug);
         if (filters.isFeatured !== undefined) query = query.eq("is_featured", filters.isFeatured);
@@ -5802,6 +5808,7 @@ export const db = {
           const q = `%${filters.search}%`;
           query = query.or(`name.ilike.${q},description.ilike.${q}`);
         }
+        if (filters.limit) query = query.limit(filters.limit);
       }
       const { data, error } = await query;
       if (!error && data) {
@@ -5893,12 +5900,15 @@ export const db = {
     return true;
   },
 
-  async getCommunities(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[]; isSummary?: boolean; limit?: number }): Promise<Community[]> {
+  async getCommunities(filters?: { slug?: string; isFeatured?: boolean; search?: string; id?: string; ids?: string[]; isSummary?: boolean; isMinimal?: boolean; limit?: number }): Promise<Community[]> {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
-      const selectStr = filters?.isSummary
-        ? "id, name, slug, description, banner_url, is_featured"
-        : "*";
+      let selectStr = "*";
+      if (filters?.isMinimal) {
+        selectStr = "id, name, slug";
+      } else if (filters?.isSummary) {
+        selectStr = "id, name, slug, description, banner_url, is_featured";
+      }
       let query = supabase.from("communities").select(selectStr);
       if (filters) {
         if (filters.slug) query = query.eq("slug", filters.slug);
