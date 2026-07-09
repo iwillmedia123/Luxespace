@@ -45,7 +45,7 @@ export default function PropertySearch() {
   useEffect(() => {
     async function loadCommunities() {
       try {
-        const comms = await db.getCommunities();
+        const comms = await db.getCommunities({ isMinimal: true });
         setCommunities(comms);
       } catch (err) {
         console.error("Error loading communities in search:", err);
