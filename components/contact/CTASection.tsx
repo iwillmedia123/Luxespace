@@ -6,7 +6,7 @@ export default function CTASection() {
   return (
     <section className="relative w-full py-32 overflow-hidden border-t border-luxury-border/20">
       <Image
-        src="/assets/penthouse_render.png"
+        src="/assets/penthouse_render.webp"
         alt="Dubai skyline luxury view"
         fill
         className="object-cover object-center"
