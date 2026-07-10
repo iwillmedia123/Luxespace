@@ -504,10 +504,10 @@ export default async function HomePage() {
               <Shield className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              Exclusive Off-Market Portfolios
+              Transparency
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              Unlock signature penthouses and island mansions that never reach the public directories. We negotiate directly with private estates.
+              We believe informed clients make confident decisions, so we share the full picture — trade-offs included.
             </Typography>
           </AnimateIn>
 
@@ -517,10 +517,10 @@ export default async function HomePage() {
               <Key className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              Escrow & Developer Audits
+              Expertise
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              We verify the physical progress, legal filings, and financials of developers, ensuring your capital is allocated into verified holdings.
+              Every recommendation is supported by research, not intuition or inventory pressure.
             </Typography>
           </AnimateIn>
 
@@ -530,10 +530,10 @@ export default async function HomePage() {
               <Landmark className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              HNWI Asset Structuring
+              Relationships
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              Bespoke legal assistance bridging property purchases with UAE residency Golden Visa pipelines, bank setups, and corporate holdings.
+              Our success is measured by lifelong clients, not one-time transactions.
             </Typography>
           </AnimateIn>
 
@@ -543,10 +543,10 @@ export default async function HomePage() {
               <BadgeCheck className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              Bespoke Concierge Viewings
+              Accountability
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              From private helicopter viewings to private yacht charters along Palm Jumeirah, we curate private, discrete inspection tours for our clients.
+              We stand behind every recommendation we make, before and after the sale.
             </Typography>
           </AnimateIn>
 
@@ -556,10 +556,10 @@ export default async function HomePage() {
               <Compass className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              Analytical Yield Modeling
+              Excellence
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              We provide historical valuation profiles, capital appreciation curves, and detailed rental yield analysis on off-plan releases.
+              Every interaction reflects professionalism, precision, and attention to detail.
             </Typography>
           </AnimateIn>
 
@@ -569,10 +569,10 @@ export default async function HomePage() {
               <HelpCircle className="w-6 h-6" />
             </div>
             <Typography variant="subheading" className="text-white normal-case text-lg font-serif">
-              Continuous Portfolio Stewardship
+              Integrity
             </Typography>
             <Typography variant="body" className="text-xs text-gray-400 font-light leading-relaxed">
-              Our relationship extends past property transfers. We handle resale listings, luxury tenant concierges, and building renovations.
+              We recommend what benefits our clients — not what benefits us.
             </Typography>
           </AnimateIn>
         </div>
