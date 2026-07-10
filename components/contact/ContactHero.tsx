@@ -1,17 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
 import Typography from "@/components/ui/Typography";
 import Button from "@/components/ui/Button";
 
 export default function ContactHero() {
   return (
     <section className="relative h-[60vh] sm:h-[70vh] w-full flex items-center justify-center overflow-hidden border-b border-luxury-border/20">
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/assets/contactus-hero-image.webp"
-        alt="Dubai Skyline View"
-        fill
-        priority
-        className="object-cover object-center"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center"
       />
       <div className="absolute inset-0 bg-black/70 z-10" />
       

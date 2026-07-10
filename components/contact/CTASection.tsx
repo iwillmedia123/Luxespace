@@ -1,15 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
 import Button from "@/components/ui/Button";
 
 export default function CTASection() {
   return (
     <section className="relative w-full py-32 overflow-hidden border-t border-luxury-border/20">
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/assets/penthouse_render.webp"
-        alt="Dubai skyline luxury view"
-        fill
-        className="object-cover object-center"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        loading="lazy"
       />
       <div className="absolute inset-0 bg-black/80 z-10" />
       
