@@ -157,7 +157,7 @@ export default function BlogPage() {
                   {/* Banner */}
                   <div className="lg:col-span-7 relative aspect-[16/10] lg:aspect-auto min-h-[300px] overflow-hidden">
                     <Image
-                      src={featuredArticle.coverImage || "/assets/apartment_render.png"}
+                      src={featuredArticle.coverImage || "/assets/apartment_render.webp"}
                       alt={featuredArticle.title}
                       fill
                       priority

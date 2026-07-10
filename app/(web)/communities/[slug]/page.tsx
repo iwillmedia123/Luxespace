@@ -137,7 +137,7 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
         <div className="bg-luxury-dark border border-luxury-border/30 rounded-3xl overflow-hidden shadow-2xl mb-10">
           <div className="h-64 sm:h-80 relative bg-luxury-charcoal/80 overflow-hidden">
             <Image
-              src={community.bannerUrl || "/assets/palm_jumeirah_render.png"}
+              src={community.bannerUrl || "/assets/palm_jumeirah_render.webp"}
               alt={community.name}
               fill
               sizes="100vw"

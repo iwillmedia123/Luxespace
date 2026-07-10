@@ -133,7 +133,7 @@ export default function PropertiesManagerPage() {
 
     if (developers.length > 0) setDeveloperId(developers[0].id);
     if (agents.length > 0) setAgentId(agents[0].id);
-    setImages(["/assets/apartment_render.png"]);
+    setImages(["/assets/apartment_render.webp"]);
     setPropertyPlanUrl("");
     setIsDrawerOpen(true);
   };

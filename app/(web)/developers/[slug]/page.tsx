@@ -275,7 +275,7 @@ export default function DeveloperDetailPage({ params }: DeveloperDetailPageProps
                         <div className="bg-luxury-dark border border-luxury-border/30 rounded-2xl p-5 hover:border-luxury-gold/30 transition-all duration-300 group flex items-center gap-4">
                           <div className="w-16 h-16 rounded-xl bg-luxury-charcoal relative overflow-hidden shrink-0">
                             <Image
-                              src={comm.bannerUrl || "/assets/apartment_render.png"}
+                              src={comm.bannerUrl || "/assets/apartment_render.webp"}
                               alt={comm.name}
                               fill
                               sizes="64px"

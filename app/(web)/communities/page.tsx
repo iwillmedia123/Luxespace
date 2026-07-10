@@ -109,7 +109,7 @@ export default function CommunitiesPage() {
                   {/* Banner Image / Cover */}
                   <div className="h-52 relative bg-luxury-charcoal/80 overflow-hidden">
                     <Image
-                      src={comm.bannerUrl || "/assets/apartment_render.png"}
+                      src={comm.bannerUrl || "/assets/apartment_render.webp"}
                       alt={comm.name}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"

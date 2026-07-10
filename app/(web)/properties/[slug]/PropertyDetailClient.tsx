@@ -106,7 +106,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             className="md:col-span-2 relative h-full rounded-2xl overflow-hidden cursor-pointer group border border-luxury-border/30 shrink-0"
           >
             <Image
-              src={property.images[0] || "/assets/apartment_render.png"}
+              src={property.images[0] || "/assets/apartment_render.webp"}
               alt={property.title}
               fill
               priority

@@ -247,7 +247,7 @@ export default function CommunitiesManagerPage() {
       slug,
       description,
       isFeatured,
-      bannerUrl: bannerUrl || "/assets/palm_jumeirah_render.png",
+      bannerUrl: bannerUrl || "/assets/palm_jumeirah_render.webp",
       coordinates: {
         lat: lat !== "" ? Number(lat) : 25.1124,
         lng: lng !== "" ? Number(lng) : 55.1390,

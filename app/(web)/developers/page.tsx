@@ -86,7 +86,7 @@ export default function DevelopersPage() {
                       src={
                         dev.logoUrl && dev.logoUrl.startsWith("http")
                           ? dev.logoUrl
-                          : "/assets/apartment_render.png"
+                          : "/assets/apartment_render.webp"
                       }
                       alt={dev.name}
                       fill

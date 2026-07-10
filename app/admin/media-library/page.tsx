@@ -16,10 +16,10 @@ interface MediaAsset {
 }
 
 const DEFAULT_ASSETS: MediaAsset[] = [
-  { id: "m1", filename: "villa_render.png", url: "/assets/villa_render.png", size: "4.2 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
-  { id: "m2", filename: "penthouse_render.png", url: "/assets/penthouse_render.png", size: "6.8 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
-  { id: "m3", filename: "apartment_render.png", url: "/assets/apartment_render.png", size: "3.1 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
-  { id: "m4", filename: "palm_jumeirah_render.png", url: "/assets/palm_jumeirah_render.png", size: "5.5 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
+  { id: "m1", filename: "villa_render.webp", url: "/assets/villa_render.webp", size: "4.2 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
+  { id: "m2", filename: "penthouse_render.webp", url: "/assets/penthouse_render.webp", size: "6.8 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
+  { id: "m3", filename: "apartment_render.webp", url: "/assets/apartment_render.webp", size: "3.1 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
+  { id: "m4", filename: "palm_jumeirah_render.webp", url: "/assets/palm_jumeirah_render.webp", size: "5.5 MB", type: "image", mime: "image/png", createdAt: new Date().toISOString() },
 ];
 
 export default function MediaLibraryPage() {
@@ -47,7 +47,7 @@ export default function MediaLibraryPage() {
     const newAsset: MediaAsset = {
       id: crypto.randomUUID(),
       filename: file.name,
-      url: "/assets/apartment_render.png", // simulate upload URL
+      url: "/assets/apartment_render.webp", // simulate upload URL
       size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
       type: file.type.startsWith("video") ? "video" : "image",
       mime: file.type || "image/png",

@@ -149,7 +149,7 @@ export default function BlogsManagerPage() {
     setTagsText("Market Report, Luxury Living");
     if (agents.length > 0) setAuthorId(agents[0].id);
     setPublishedAt("");
-    setCoverImage("/assets/apartment_render.png");
+    setCoverImage("/assets/apartment_render.webp");
     setGallery([]);
     setRelatedProperties([]);
     setRelatedCommunities([]);
@@ -175,7 +175,7 @@ export default function BlogsManagerPage() {
     setTagsText(post.tags ? post.tags.join(", ") : "");
     setAuthorId(post.authorId);
     setPublishedAt(post.publishedAt ? post.publishedAt.split("T")[0] : "");
-    setCoverImage(post.coverImage || "/assets/apartment_render.png");
+    setCoverImage(post.coverImage || "/assets/apartment_render.webp");
     setGallery(post.gallery || []);
     setRelatedProperties(post.relatedProperties || []);
     setRelatedCommunities(post.relatedCommunities || []);
@@ -211,7 +211,7 @@ export default function BlogsManagerPage() {
       slug: slug.trim(),
       summary: summary.trim(),
       content: content.trim(),
-      coverImage: coverImage || "/assets/apartment_render.png",
+      coverImage: coverImage || "/assets/apartment_render.webp",
       gallery,
       category,
       status,

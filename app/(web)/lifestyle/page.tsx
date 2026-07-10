@@ -73,7 +73,7 @@ export default function LifestylePage() {
                 {/* Cover Photo */}
                 <div className="h-56 relative bg-luxury-charcoal/80 overflow-hidden">
                   <Image
-                    src={art.coverImage || "/assets/apartment_render.png"}
+                    src={art.coverImage || "/assets/apartment_render.webp"}
                     alt={art.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"

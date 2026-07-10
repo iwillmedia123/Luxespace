@@ -119,7 +119,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Palm Jumeirah",
     "slug": "palm-jumeirah",
     "description": "Iconic man-made island offering beachfront villas and high-end suites.",
-    "bannerUrl": "/assets/palm_jumeirah_render.png",
+    "bannerUrl": "/assets/palm_jumeirah_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.1124,
@@ -133,7 +133,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Downtown Dubai",
     "slug": "downtown-dubai",
     "description": "The vibrant heart of the city centered around Burj Khalifa and Dubai Mall.",
-    "bannerUrl": "/assets/penthouse_render.png",
+    "bannerUrl": "/assets/penthouse_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.2048,
@@ -147,7 +147,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Dubai Hills Estate",
     "slug": "dubai-hills-estate",
     "description": "Golf green oasis with premium residential enclaves and modern townhouses.",
-    "bannerUrl": "/assets/villa_render.png",
+    "bannerUrl": "/assets/villa_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.1014,
@@ -161,7 +161,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Dubai Marina",
     "slug": "dubai-marina",
     "description": "High-rise coastal towers looking over luxury yachts and waterfront walkways.",
-    "bannerUrl": "/assets/apartment_render.png",
+    "bannerUrl": "/assets/apartment_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.0805,
@@ -175,7 +175,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Business Bay",
     "slug": "business-bay",
     "description": "High-flying corporate and residential hub next to the Dubai Water Canal.",
-    "bannerUrl": "/assets/apartment_render.png",
+    "bannerUrl": "/assets/apartment_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.1824,
@@ -189,7 +189,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Jumeirah Beach Residence",
     "slug": "jbr",
     "description": "Beachfront towers, dining promenades, and casual coastal living.",
-    "bannerUrl": "/assets/palm_jumeirah_render.png",
+    "bannerUrl": "/assets/palm_jumeirah_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.0782,
@@ -203,7 +203,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Dubai Creek Harbour",
     "slug": "dubai-creek-harbour",
     "description": "Ultra-modern waterfront living with views of the historic creek and skyline.",
-    "bannerUrl": "/assets/penthouse_render.png",
+    "bannerUrl": "/assets/penthouse_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.2014,
@@ -217,7 +217,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "MBR City",
     "slug": "mbr-city",
     "description": "Mohammed Bin Rashid City, home to District One and massive crystal lagoons.",
-    "bannerUrl": "/assets/villa_render.png",
+    "bannerUrl": "/assets/villa_render.webp",
     "isFeatured": true,
     "coordinates": {
       "lat": 25.1504,
@@ -231,7 +231,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Arabian Ranches",
     "slug": "arabian-ranches",
     "description": "Established desert-themed luxury villa community for families.",
-    "bannerUrl": "/assets/villa_render.png",
+    "bannerUrl": "/assets/villa_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.0344,
@@ -245,7 +245,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "DIFC",
     "slug": "difc",
     "description": "Dubai International Financial Centre, upscale financial district and dining.",
-    "bannerUrl": "/assets/penthouse_render.png",
+    "bannerUrl": "/assets/penthouse_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.2154,
@@ -259,7 +259,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Jumeirah Village Circle",
     "slug": "jvc",
     "description": "Family-oriented community with a mix of townhouses and low-rise apartments.",
-    "bannerUrl": "/assets/apartment_render.png",
+    "bannerUrl": "/assets/apartment_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.0584,
@@ -273,7 +273,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Al Barsha",
     "slug": "al-barsha",
     "description": "Residential district featuring Mall of the Emirates and quiet villas.",
-    "bannerUrl": "/assets/villa_render.png",
+    "bannerUrl": "/assets/villa_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.1184,
@@ -287,7 +287,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Jumeirah",
     "slug": "jumeirah",
     "description": "Coastal area with low-rise luxury villas, beach clubs, and cafes.",
-    "bannerUrl": "/assets/villa_render.png",
+    "bannerUrl": "/assets/villa_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.2014,
@@ -301,7 +301,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "Bluewaters Island",
     "slug": "bluewaters-island",
     "description": "Offshore lifestyle island home to Ain Dubai and upscale waterfront residences.",
-    "bannerUrl": "/assets/apartment_render.png",
+    "bannerUrl": "/assets/apartment_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.0799,
@@ -315,7 +315,7 @@ const MOCK_COMMUNITIES: Community[] = [
     "name": "City Walk",
     "slug": "city-walk",
     "description": "Design-inspired open-air retail, dining, and premium low-rise apartments.",
-    "bannerUrl": "/assets/apartment_render.png",
+    "bannerUrl": "/assets/apartment_render.webp",
     "isFeatured": false,
     "coordinates": {
       "lat": 25.2074,
@@ -474,10 +474,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1084,
     "longitude": 55.135000000000005,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -514,10 +514,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1094,
     "longitude": 55.136,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -553,10 +553,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.110400000000002,
     "longitude": 55.137,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -592,10 +592,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1114,
     "longitude": 55.138000000000005,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -632,10 +632,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1124,
     "longitude": 55.139,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -671,10 +671,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.113400000000002,
     "longitude": 55.14,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -710,10 +710,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1144,
     "longitude": 55.141000000000005,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -749,10 +749,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2078,
     "longitude": 55.2738,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -789,10 +789,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2088,
     "longitude": 55.2748,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -828,10 +828,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1998,
     "longitude": 55.2658,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -867,10 +867,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.200799999999997,
     "longitude": 55.2668,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -906,10 +906,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2018,
     "longitude": 55.2678,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -946,10 +946,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2028,
     "longitude": 55.2688,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -985,10 +985,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.203799999999998,
     "longitude": 55.269800000000004,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1024,10 +1024,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1014,
     "longitude": 55.2588,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1063,10 +1063,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.102400000000003,
     "longitude": 55.2598,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1103,10 +1103,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1034,
     "longitude": 55.2608,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1142,10 +1142,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.104400000000002,
     "longitude": 55.2618,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1181,10 +1181,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.105400000000003,
     "longitude": 55.2628,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1220,10 +1220,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.096400000000003,
     "longitude": 55.2538,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1260,10 +1260,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0974,
     "longitude": 55.2548,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1299,10 +1299,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0775,
     "longitude": 55.1373,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1338,10 +1338,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.078500000000002,
     "longitude": 55.1383,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1377,10 +1377,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0795,
     "longitude": 55.139300000000006,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1417,10 +1417,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0805,
     "longitude": 55.1403,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1456,10 +1456,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.081500000000002,
     "longitude": 55.1413,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1495,10 +1495,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0825,
     "longitude": 55.142300000000006,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1534,10 +1534,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0835,
     "longitude": 55.1433,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1574,10 +1574,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.186400000000003,
     "longitude": 55.276799999999994,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1613,10 +1613,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.177400000000002,
     "longitude": 55.267799999999994,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1652,10 +1652,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1784,
     "longitude": 55.2688,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1691,10 +1691,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1794,
     "longitude": 55.2698,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1731,10 +1731,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.180400000000002,
     "longitude": 55.270799999999994,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1770,10 +1770,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1814,
     "longitude": 55.2718,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1809,10 +1809,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1824,
     "longitude": 55.2728,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1848,10 +1848,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0792,
     "longitude": 55.1338,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1888,10 +1888,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.080199999999998,
     "longitude": 55.134800000000006,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1927,10 +1927,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0812,
     "longitude": 55.1358,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -1966,10 +1966,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0822,
     "longitude": 55.1368,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2005,10 +2005,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0732,
     "longitude": 55.1278,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2045,10 +2045,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.074199999999998,
     "longitude": 55.128800000000005,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2084,10 +2084,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0752,
     "longitude": 55.1298,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2123,10 +2123,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1994,
     "longitude": 55.3508,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2162,10 +2162,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2004,
     "longitude": 55.351800000000004,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2202,10 +2202,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2014,
     "longitude": 55.3528,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2241,10 +2241,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2024,
     "longitude": 55.3538,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2280,10 +2280,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2034,
     "longitude": 55.354800000000004,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2319,10 +2319,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2044,
     "longitude": 55.3558,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2359,10 +2359,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2054,
     "longitude": 55.3568,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2398,10 +2398,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.145400000000002,
     "longitude": 55.303799999999995,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2437,10 +2437,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1464,
     "longitude": 55.3048,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2476,10 +2476,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1474,
     "longitude": 55.3058,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2516,10 +2516,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.148400000000002,
     "longitude": 55.306799999999996,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2555,10 +2555,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1494,
     "longitude": 55.3078,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2594,10 +2594,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1504,
     "longitude": 55.3088,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2633,10 +2633,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.151400000000002,
     "longitude": 55.309799999999996,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2673,10 +2673,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0364,
     "longitude": 55.2828,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2712,10 +2712,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0374,
     "longitude": 55.2838,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2751,10 +2751,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.038400000000003,
     "longitude": 55.2848,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2790,10 +2790,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.029400000000003,
     "longitude": 55.2758,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2830,10 +2830,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0304,
     "longitude": 55.2768,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2869,10 +2869,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0314,
     "longitude": 55.2778,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2908,10 +2908,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.032400000000003,
     "longitude": 55.2788,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2947,10 +2947,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.214399999999998,
     "longitude": 55.2808,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -2987,10 +2987,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2154,
     "longitude": 55.2818,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3026,10 +3026,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2164,
     "longitude": 55.282799999999995,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3065,10 +3065,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.217399999999998,
     "longitude": 55.2838,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3104,10 +3104,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2184,
     "longitude": 55.2848,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3144,10 +3144,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2194,
     "longitude": 55.285799999999995,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3183,10 +3183,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2104,
     "longitude": 55.276799999999994,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3222,10 +3222,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.054399999999998,
     "longitude": 55.198800000000006,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3261,10 +3261,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0554,
     "longitude": 55.1998,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3301,10 +3301,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0564,
     "longitude": 55.2008,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3340,10 +3340,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.057399999999998,
     "longitude": 55.201800000000006,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3379,10 +3379,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0584,
     "longitude": 55.2028,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3418,10 +3418,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0594,
     "longitude": 55.2038,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3458,10 +3458,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1204,
     "longitude": 55.2308,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3497,10 +3497,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1214,
     "longitude": 55.2318,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3536,10 +3536,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.122400000000003,
     "longitude": 55.2328,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3575,10 +3575,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.113400000000002,
     "longitude": 55.2238,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3615,10 +3615,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1144,
     "longitude": 55.2248,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3654,10 +3654,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1154,
     "longitude": 55.2258,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3693,10 +3693,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.1994,
     "longitude": 55.236799999999995,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3732,10 +3732,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2004,
     "longitude": 55.2378,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3772,10 +3772,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2014,
     "longitude": 55.2388,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3811,10 +3811,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2024,
     "longitude": 55.239799999999995,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3850,10 +3850,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2034,
     "longitude": 55.2408,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3889,10 +3889,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2044,
     "longitude": 55.2418,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3929,10 +3929,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0839,
     "longitude": 55.126799999999996,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -3968,10 +3968,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0749,
     "longitude": 55.117799999999995,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4007,10 +4007,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.075899999999997,
     "longitude": 55.1188,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4046,10 +4046,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0769,
     "longitude": 55.1198,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4086,10 +4086,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.0779,
     "longitude": 55.120799999999996,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4125,10 +4125,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.078899999999997,
     "longitude": 55.1218,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4164,10 +4164,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2074,
     "longitude": 55.2618,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4203,10 +4203,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2084,
     "longitude": 55.2628,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4243,10 +4243,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2094,
     "longitude": 55.2638,
     "images": [
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png"
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4282,10 +4282,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2104,
     "longitude": 55.2648,
     "images": [
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png"
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4321,10 +4321,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2114,
     "longitude": 55.2658,
     "images": [
-      "/assets/apartment_render.png",
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png"
+      "/assets/apartment_render.webp",
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4360,10 +4360,10 @@ const MOCK_PROPERTIES: Property[] = [
     "latitude": 25.2024,
     "longitude": 55.2568,
     "images": [
-      "/assets/palm_jumeirah_render.png",
-      "/assets/villa_render.png",
-      "/assets/penthouse_render.png",
-      "/assets/apartment_render.png"
+      "/assets/palm_jumeirah_render.webp",
+      "/assets/villa_render.webp",
+      "/assets/penthouse_render.webp",
+      "/assets/apartment_render.webp"
     ],
     "videos": [
       "/assets/hero-video.mp4"
@@ -4396,7 +4396,7 @@ const MOCK_TESTIMONIALS: Testimonial[] = [
 ];
 
 const MOCK_BLOGS: BlogPost[] = [
-  { id: "b1", title: "Dubai Q3 Luxury Real Estate Insights", slug: "dubai-q3-luxury-insights", summary: "In-depth HNW capital flows and yield analysis.", content: "Full editorial content...", coverImage: "/assets/apartment_render.png", authorId: "agent1", isPublished: true, status: "published", tags: ["Market News", "Advisory"], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: "b1", title: "Dubai Q3 Luxury Real Estate Insights", slug: "dubai-q3-luxury-insights", summary: "In-depth HNW capital flows and yield analysis.", content: "Full editorial content...", coverImage: "/assets/apartment_render.webp", authorId: "agent1", isPublished: true, status: "published", tags: ["Market News", "Advisory"], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
 ];
 
 const MOCK_FAQS: FAQItem[] = [
@@ -4927,7 +4927,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Beach Living",
     "summary": "Discover why Palm Jumeirah remains the ultimate address for private ocean terraces and bespoke luxury living in Dubai.",
     "content": "Dubai's waterfront real estate is world-famous, but nothing captures the imagination quite like the private fronds of Palm Jumeirah. Offering double-height glass structures, custom private beach entries, and unparalleled views of the Arabian Gulf, living on the Palm is less about having a house and more about owning a private slice of the ocean. In this editorial guide, we explore the interior aesthetics of the Frond Mansions, custom wellness pools, yacht docks, and why the global elite choose the Palm as their primary residence.",
-    "coverImage": "/assets/palm_jumeirah_render.png",
+    "coverImage": "/assets/palm_jumeirah_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-26T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
@@ -4939,7 +4939,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Interior Design",
     "summary": "Unveiling the glassmorphism, travertine claddings, and Italian bespoke marbles defined by top-tier decorators.",
     "content": "Penthouses in Downtown Dubai and Business Bay are pushing the boundaries of architectural interior design. Travertine stone cladding, custom brass accents, and solid Italian Carrara marble are standard. Floor-to-ceiling glass allows decorators to integrate the skyline itself as a living canvas. We speak with luxury designers who discuss spatial planning, acoustic damping, custom ambient lighting, and how bespoke furnishings elevate double-height sky mansions into editorial sanctuaries.",
-    "coverImage": "/assets/penthouse_render.png",
+    "coverImage": "/assets/penthouse_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-21T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
@@ -4951,7 +4951,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Family Communities",
     "summary": "Exploring championship golf parks, world-class schools, and leafy villa enclaves in Dubai Hills.",
     "content": "For families seeking an active, green lifestyle without losing connection to the city center, Dubai Hills Estate represents the absolute peak of modern urban planning. Spread around an 18-hole championship golf course, the community is anchored by leafy parks, multi-mile cycling paths, top-rated hospitals (King's College), and premium international academies. This article outlines the architectural styles of Sidra and Maple townhouses, and the exclusive Parkway Vistas custom builds.",
-    "coverImage": "/assets/villa_render.png",
+    "coverImage": "/assets/villa_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-16T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
@@ -4963,7 +4963,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Investment Guides",
     "summary": "How global wealth managers structure 2M+ real estate portfolios to secure long-term UAE residency.",
     "content": "The UAE's 10-year Golden Visa has transformed Dubai from a temporary expat market into a permanent home for high-net-worth individuals. By allocating a minimum of 2 million AED into local real estate, investors gain stability, zero property tax, and full sponsor rights. We write an investment playbook outlining tax structures, off-plan vs ready assets yield comparisons, and the best mortgage options available to non-resident investors.",
-    "coverImage": "/assets/apartment_render.png",
+    "coverImage": "/assets/apartment_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-11T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
@@ -4975,7 +4975,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Dubai Lifestyle",
     "summary": "From Zuma to bespoke rooftop chef tables, exploring the high culinary landscape of central Dubai.",
     "content": "Dubai's culinary scene is thriving. With Business Bay and DIFC housing some of the world's most acclaimed dining spots, living in these corporate hubs offers immediate proximity to culinary masterworks. We review the top rooftop dining terraces, private chef tables, custom menus, and tell you which luxury developments give residents private elevator access straight to world-class dining lounges.",
-    "coverImage": "/assets/apartment_render.png",
+    "coverImage": "/assets/apartment_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-06T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
@@ -4987,7 +4987,7 @@ const MOCK_LIFESTYLE: LifestyleArticle[] = [
     "category": "Business Lifestyle",
     "summary": "Why global tech executives and hedge fund managers choose high-rise sky residences over beach villas.",
     "content": "The luxury market is split: beach versus city. While beach villas offer coastal proximity, high-rise penthouses in Downtown Dubai offer lock-and-leave convenience, absolute privacy, and panoramic views of the city. We highlight top towers, private helicopter access pads, automated home theaters, and explore why global entrepreneurs choose high-rise penthouses as their secondary offices.",
-    "coverImage": "/assets/penthouse_render.png",
+    "coverImage": "/assets/penthouse_render.webp",
     "isPublished": true,
     "createdAt": "2026-06-01T08:14:38.593Z",
     "updatedAt": "2026-07-01T08:14:38.593Z"
