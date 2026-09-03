@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar } from "lucide-react";
@@ -255,15 +256,16 @@ export default function HeroScroll() {
             >
               Explore Properties
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => (window.location.href = "/contact")}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 border-white/20 hover:border-luxury-gold hover:text-luxury-gold hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Book Consultation</span>
-            </Button>
+            <Link href="/contact" className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full flex items-center justify-center gap-2 border-white/20 hover:border-luxury-gold hover:text-luxury-gold hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300"
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Book Consultation</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

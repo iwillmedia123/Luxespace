@@ -53,9 +53,10 @@ export default function ContactClient() {
     // 1. Register ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // ==========================================
-    // 2. PAGE LOADING & ENTRANCE TRANSITION
-    // ==========================================
+    const ctx = gsap.context(() => {
+      // ==========================================
+      // 2. PAGE LOADING & ENTRANCE TRANSITION
+      // ==========================================
     gsap.fromTo(
       pageWrapperRef.current,
       { opacity: 0, filter: "blur(10px)" },
@@ -346,11 +347,13 @@ export default function ContactClient() {
       }
     }
 
+    }, pageWrapperRef);
+
     // ==========================================
     // CLEANUP ON UNMOUNT
     // ==========================================
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
     };
   }, []);
 

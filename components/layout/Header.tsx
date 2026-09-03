@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Search, X, MessageSquare, Calendar, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MegaMenu from "@/components/layout/MegaMenu";
@@ -32,6 +32,7 @@ export default function Header() {
   const [searchVal, setSearchVal] = useState("");
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const { count } = useFavourites();
 
   useEffect(() => {
@@ -163,16 +164,17 @@ export default function Header() {
             </a>
 
             {/* Consultation CTA */}
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => (window.location.href = "/contact")}
-              className="flex items-center gap-1 xl:gap-1.5 text-[8px] xl:text-[9px] 2xl:text-[10px]"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="hidden 2xl:inline">Book Consultation</span>
-              <span className="inline 2xl:hidden">Book</span>
-            </Button>
+            <Link href="/contact">
+              <Button
+                variant="primary"
+                size="sm"
+                className="flex items-center gap-1 xl:gap-1.5 text-[8px] xl:text-[9px] 2xl:text-[10px]"
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span className="hidden 2xl:inline">Book Consultation</span>
+                <span className="inline 2xl:hidden">Book</span>
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile hamburger menu */}
@@ -221,7 +223,7 @@ export default function Header() {
               e.preventDefault();
               if (searchVal.trim()) {
                 setShowSearch(false);
-                window.location.href = `/search?q=${encodeURIComponent(searchVal.trim())}`;
+                router.push(`/search?q=${encodeURIComponent(searchVal.trim())}`);
               }
             }}
             className="max-w-3xl mx-auto flex items-center gap-3 w-full"

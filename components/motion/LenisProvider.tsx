@@ -22,14 +22,23 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
     });
 
     // Update GSAP ScrollTrigger whenever Lenis scrolls
-    lenis.on("scroll", () => {
-      ScrollTrigger.update();
-    });
+    const handleScroll = () => {
+      try {
+        ScrollTrigger.update();
+      } catch {
+        // Safe catch if ScrollTrigger instances are refreshing during route transition
+      }
+    };
+    lenis.on("scroll", handleScroll);
 
     // Standard high-performance native browser loop for Lenis scroll physics
     let rafId: number;
     const rafLoop = (time: number) => {
-      lenis.raf(time);
+      try {
+        lenis.raf(time);
+      } catch {
+        // Safe catch for transition updates
+      }
       rafId = requestAnimationFrame(rafLoop);
     };
     
@@ -37,11 +46,19 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
 
     // Refresh ScrollTrigger calculations after initial loading transitions finish
     const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
+      try {
+        ScrollTrigger.refresh();
+      } catch {
+        // Ignore during route change
+      }
     }, 500);
 
     const handleRefresh = () => {
-      lenis.resize();
+      try {
+        lenis.resize();
+      } catch {
+        // Ignore during route change
+      }
     };
     ScrollTrigger.addEventListener("refresh", handleRefresh);
 
@@ -50,7 +67,11 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       lenis.destroy();
       cancelAnimationFrame(rafId);
       clearTimeout(refreshTimer);
-      ScrollTrigger.removeEventListener("refresh", handleRefresh);
+      try {
+        ScrollTrigger.removeEventListener("refresh", handleRefresh);
+      } catch {
+        // Ignore cleanup errors
+      }
     };
   }, []);
 

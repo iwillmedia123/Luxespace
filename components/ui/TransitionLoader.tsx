@@ -51,11 +51,11 @@ function TransitionLoaderInner() {
     setLoadingText(text);
     setVisible(true);
 
-    // Safety fallback: auto-dismiss after 8 seconds
+    // Safety fallback: auto-dismiss after 3 seconds if route transition completes or halts
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
     fallbackTimerRef.current = setTimeout(() => {
       endLoader();
-    }, 8000);
+    }, 3000);
   }, [endLoader]);
 
   // Dismiss loader on pathname/search change

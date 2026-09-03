@@ -224,9 +224,12 @@ export default function AboutClient() {
     // Register GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // ==========================================
-    // 0. PREMIUM LOADING & TRANSITION SYSTEM
-    // ==========================================
+    let magneticCleanupFns: Array<() => void> = [];
+
+    const ctx = gsap.context(() => {
+      // ==========================================
+      // 0. PREMIUM LOADING & TRANSITION SYSTEM
+      // ==========================================
     gsap.fromTo(
       pageWrapperRef.current,
       { opacity: 0, filter: "blur(10px)" },
@@ -686,19 +689,21 @@ export default function AboutClient() {
     // 13. MOUSE HOVER MAGNETIC BINDINGS
     // ==========================================
     const magneticBtns = document.querySelectorAll(".magnetic-btn");
-    const magneticCleanupFns: Array<() => void> = [];
+    magneticCleanupFns = [];
 
     magneticBtns.forEach((btn) => {
       const cleanup = magneticHover(btn as HTMLElement, 0.25);
       if (cleanup) magneticCleanupFns.push(cleanup);
     });
 
+    }, pageWrapperRef);
+
     // ==========================================
     // CLEANUP ON UNMOUNT
     // ==========================================
     return () => {
-      // 1. Destroy ScrollTriggers
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      // 1. Revert scoped GSAP animations and triggers
+      ctx.revert();
 
       // 2. Stop Canvas anim
       if (canvasCleanupRef.current) {
