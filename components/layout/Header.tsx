@@ -154,7 +154,7 @@ export default function Header() {
 
             {/* WhatsApp Link */}
             <a
-              href="https://wa.me/9745334644"
+              href="https://wa.me/971501348020"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 xl:gap-1.5 text-[8px] xl:text-[9px] 2xl:text-[10px] uppercase tracking-wider xl:tracking-widest text-gray-300 hover:text-luxury-gold transition-colors duration-300 border border-luxury-border/60 hover:border-luxury-gold/50 px-2 py-1.5 xl:px-3.5 xl:py-2.5 rounded-full"
@@ -273,7 +273,7 @@ export default function Header() {
           
           <div className="flex flex-col gap-4 mt-8 pb-12">
             <a
-              href="https://wa.me/9745334644"
+              href="https://wa.me/971501348020"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-white border border-luxury-gold/50 py-3 rounded-full hover:bg-luxury-gold/10 transition-all duration-300"

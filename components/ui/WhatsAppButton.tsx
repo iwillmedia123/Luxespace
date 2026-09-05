@@ -5,7 +5,7 @@ import { MessageSquare } from "lucide-react";
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/9745334644"
+      href="https://wa.me/971501348020"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-8 left-8 z-40 w-11 h-11 rounded-full bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-500/20 flex items-center justify-center text-white shadow-2xl transition-all duration-300 focus:outline-none cursor-pointer group hover:scale-110 active:scale-95"

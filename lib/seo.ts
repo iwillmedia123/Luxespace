@@ -188,7 +188,7 @@ export function generateOrganizationJsonLd() {
     image: "https://luxespace.ae/assets/logo.png",
     "@id": "https://luxespace.ae/#organization",
     url: "https://luxespace.ae",
-    telephone: "+971 4 123 4567",
+    telephone: "+971 50 134 8020",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Marina Plaza, Office 2501",

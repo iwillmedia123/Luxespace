@@ -34,7 +34,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-3">
               <a
-                href="https://wa.me/9745334644"
+                href="https://wa.me/971501348020"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full border border-luxury-border/50 hover:border-luxury-gold hover:bg-luxury-gold/10 flex items-center justify-center text-gray-300 hover:text-luxury-gold transition-all duration-300"
@@ -132,8 +132,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-luxury-gold shrink-0" />
-                <a href="tel:+9745334644" className="hover:text-luxury-gold transition-colors duration-300">
-                  +974 5334 644
+                <a href="tel:+971501348020" className="hover:text-luxury-gold transition-colors duration-300">
+                  +971 50 134 8020
                 </a>
               </li>
               <li className="flex items-center gap-2.5">

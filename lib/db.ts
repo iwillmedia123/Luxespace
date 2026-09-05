@@ -5017,7 +5017,7 @@ class LocalStorageDB {
     this.initKey("luxespace_downloads", MOCK_DOWNLOADS);
     this.initKey("luxespace_lifestyle", MOCK_LIFESTYLE);
     this.initKey("luxespace_subscribers", ["luxespace.subscriber@gmail.com"]);
-    this.initKey("luxespace_settings", { companyName: "Luxespace Properties", email: "luxespace@gmail.com", phone: "9745334644" });
+    this.initKey("luxespace_settings", { companyName: "Luxespace Properties", email: "luxespace@gmail.com", phone: "+971 50 134 8020" });
   }
 
   get<T>(key: string): T[] {
@@ -6657,8 +6657,8 @@ export const db = {
 
   // Dynamic Settings CRUD
   async getSettings(): Promise<Record<string, string>> {
-    if (typeof window === "undefined") return { companyName: "Luxespace Properties", email: "luxespace@gmail.com", phone: "9745334644" };
-    return JSON.parse(localStorage.getItem("luxespace_settings") || '{"companyName": "Luxespace Properties", "email": "luxespace@gmail.com", "phone": "9745334644"}');
+    if (typeof window === "undefined") return { companyName: "Luxespace Properties", email: "luxespace@gmail.com", phone: "+971 50 134 8020" };
+    return JSON.parse(localStorage.getItem("luxespace_settings") || '{"companyName": "Luxespace Properties", "email": "luxespace@gmail.com", "phone": "+971 50 134 8020"}');
   },
 
   async updateSettings(settings: Record<string, string>): Promise<Record<string, string> | undefined> {

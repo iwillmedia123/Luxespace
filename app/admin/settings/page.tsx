@@ -13,10 +13,10 @@ export default function SystemSettingsPage() {
   // Form States
   const [companyName, setCompanyName] = useState("Luxespace Properties");
   const [email, setEmail] = useState("luxespace@gmail.com");
-  const [phone, setPhone] = useState("9745334644");
+  const [phone, setPhone] = useState("+971 50 134 8020");
   const [address, setAddress] = useState("Downtown Boulevard Tower 1, Dubai, UAE");
   const [resendApiKey, setResendApiKey] = useState("");
-  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/9745334644");
+  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/971501348020");
   const [instagramLink, setInstagramLink] = useState("https://instagram.com/luxespace");
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState("");
   const [metaPixelId, setMetaPixelId] = useState("");
@@ -36,10 +36,10 @@ export default function SystemSettingsPage() {
         if (data) {
           setCompanyName(data.companyName || "Luxespace Properties");
           setEmail(data.email || "luxespace@gmail.com");
-          setPhone(data.phone || "9745334644");
+          setPhone(data.phone || "+971 50 134 8020");
           setAddress(data.address || "Downtown Boulevard Tower 1, Dubai, UAE");
           setResendApiKey(data.resendApiKey || "");
-          setWhatsappLink(data.whatsappLink || "https://wa.me/9745334644");
+          setWhatsappLink(data.whatsappLink || "https://wa.me/971501348020");
           setInstagramLink(data.instagramLink || "https://instagram.com/luxespace");
           setGoogleAnalyticsId(data.googleAnalyticsId || "");
           setMetaPixelId(data.metaPixelId || "");

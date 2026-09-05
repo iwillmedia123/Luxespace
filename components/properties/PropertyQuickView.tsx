@@ -112,7 +112,7 @@ export default function PropertyQuickView({ property, onClose }: PropertyQuickVi
 
             <div className="flex gap-2">
               <a
-                href="https://wa.me/9745334644"
+                href="https://wa.me/971501348020"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-1/2 flex items-center justify-center gap-2 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500 text-white hover:text-black py-2.5 rounded-xl text-xs font-semibold transition-all"

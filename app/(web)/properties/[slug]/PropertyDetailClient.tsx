@@ -342,7 +342,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               {/* Direct Channels */}
               <div className="flex flex-col gap-2 pt-2">
                 <a
-                  href={`https://wa.me/${property.agent?.whatsapp || "9745334644"}`}
+                  href={`https://wa.me/${property.agent?.whatsapp ? property.agent.whatsapp.replace(/[^0-9]/g, "") : "971501348020"}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500 text-white hover:text-black py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer"
@@ -351,7 +351,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   <span>WhatsApp Consultant</span>
                 </a>
                 <a
-                  href={`tel:${property.agent?.phone || "9745334644"}`}
+                  href={`tel:${property.agent?.phone || "+971501348020"}`}
                   className="flex items-center justify-center gap-2 bg-luxury-charcoal border border-luxury-border/40 hover:border-white py-3 rounded-xl text-xs font-semibold text-white transition-all cursor-pointer"
                 >
                   <Phone className="w-4 h-4 shrink-0" />
