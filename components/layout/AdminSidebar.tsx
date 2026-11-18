@@ -62,13 +62,13 @@ export default function AdminSidebar() {
       <div className="flex-1 flex flex-col">
         {/* Header Branding */}
         <div className="h-16 px-6 border-b border-luxury-border/30 flex items-center gap-2.5">
-          <div className="relative w-8 h-8 overflow-hidden rounded bg-luxury-charcoal border border-luxury-gold/20 flex items-center justify-center p-1">
+          <div className="relative w-8 h-8 overflow-hidden rounded-md border border-luxury-gold/30 flex items-center justify-center shadow-sm">
             <Image
               src="/assets/logo.png"
               alt="Luxespace"
-              width={26}
-              height={26}
-              className="object-contain"
+              width={32}
+              height={32}
+              className="object-cover w-full h-full"
             />
           </div>
           <span className="font-serif text-sm tracking-widest text-white uppercase block">

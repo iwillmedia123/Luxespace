@@ -14,13 +14,13 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-9 h-9 overflow-hidden rounded bg-luxury-charcoal border border-luxury-gold/20 flex items-center justify-center p-1">
+              <div className="relative w-9 h-9 overflow-hidden rounded-md border border-luxury-gold/30 flex items-center justify-center shadow-sm">
                 <Image
                   src="/assets/logo.png"
                   alt="Luxespace"
-                  width={28}
-                  height={28}
-                  className="object-contain"
+                  width={36}
+                  height={36}
+                  className="object-cover w-full h-full"
                 />
               </div>
               <Typography variant="nav" className="text-white hover:text-luxury-gold tracking-widest uppercase font-serif">

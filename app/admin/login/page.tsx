@@ -134,13 +134,12 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md space-y-8 z-10">
         {/* Branding header */}
         <div className="flex flex-col items-center text-center space-y-3">
-          <div className="relative w-14 h-14 overflow-hidden rounded bg-luxury-dark border border-luxury-gold/30 flex items-center justify-center p-2 shadow-lg shadow-black/40">
+          <div className="relative w-16 h-16 overflow-hidden rounded-xl border border-luxury-gold/40 flex items-center justify-center shadow-xl shadow-luxury-gold/10">
             <Image
               src="/assets/logo.png"
               alt="Luxespace Logo"
-              width={40}
-              height={40}
-              className="object-contain"
+              fill
+              className="object-cover"
             />
           </div>
           <div className="space-y-1.5">

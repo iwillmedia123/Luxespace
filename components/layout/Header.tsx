@@ -74,13 +74,13 @@ export default function Header() {
           
            {/* Brand Identity / Logo */}
           <Link href="/" className="flex items-center gap-1.5 xl:gap-2.5 group mr-2 xl:mr-6 2xl:mr-8 shrink-0">
-            <div className="relative w-8 h-8 xl:w-9 xl:h-9 overflow-hidden rounded bg-luxury-dark border border-luxury-gold/20 flex items-center justify-center p-1">
+            <div className="relative w-8 h-8 xl:w-9 xl:h-9 overflow-hidden rounded-md border border-luxury-gold/30 flex items-center justify-center shadow-sm">
               <Image
                 src="/assets/logo.png"
                 alt="Luxespace Properties"
-                width={30}
-                height={30}
-                className="object-contain transition-transform duration-500 group-hover:scale-105"
+                width={36}
+                height={36}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <span className="font-serif text-xs sm:text-sm xl:text-base tracking-widest text-white transition-colors duration-300 group-hover:text-luxury-gold uppercase">

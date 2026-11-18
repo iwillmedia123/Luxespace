@@ -36,15 +36,14 @@ export default function LoadingScreen() {
                 opacity: 1,
                 transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
               }}
-              className="relative w-20 h-20 overflow-hidden rounded bg-luxury-dark border border-luxury-gold/15 flex items-center justify-center p-2.5 shadow-2xl shadow-black/45"
+              className="relative w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-2xl border border-luxury-gold/30 flex items-center justify-center shadow-2xl shadow-luxury-gold/10"
             >
               <Image
                 src="/assets/logo.png"
                 alt="Luxespace Properties"
-                width={64}
-                height={64}
+                fill
                 priority
-                className="object-contain"
+                className="object-cover"
               />
             </motion.div>
 
