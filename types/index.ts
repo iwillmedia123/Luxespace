@@ -256,3 +256,64 @@ export interface BlogCategory {
   slug: string;
   createdAt: string;
 }
+
+export interface ProjectUnit {
+  id?: string;
+  typology: string;
+  startingPrice: number | string;
+  buaSqft?: number | string;
+  plotSqft?: number | string;
+  pricePerSqftBua?: number | string;
+  pricePerSqftPlot?: number | string;
+}
+
+export interface ProjectMilestone {
+  milestone: string;
+  sharePercentage: number | string;
+  timing: string;
+}
+
+export interface ProjectDriveTime {
+  destination: string;
+  time: string;
+}
+
+export interface ProjectFaq {
+  question: string;
+  answer: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  headline?: string;
+  description: string;
+  content: string;
+  developerId?: string;
+  developerName?: string;
+  communityId?: string;
+  communityName?: string;
+  location: string;
+  propertyType: string;
+  startingPrice: number;
+  paymentPlanSummary?: string;
+  handoverDate?: string;
+  status: 'pre-launch' | 'launching-soon' | 'active' | 'under-construction' | 'handover-soon' | 'sold-out';
+  isFeatured?: boolean;
+  coverImage: string;
+  gallery: string[];
+  pdfBrochureUrl?: string;
+  pdfBrochureSize?: string;
+  pdfBrochureName?: string;
+  units?: ProjectUnit[];
+  paymentPlan?: ProjectMilestone[];
+  driveTimes?: ProjectDriveTime[];
+  amenities?: string[];
+  faqs?: ProjectFaq[];
+  assignedAgentId?: string;
+  tags?: string[];
+  seo?: BlogPostSeo;
+  createdAt: string;
+  updatedAt: string;
+}

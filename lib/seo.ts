@@ -1,4 +1,4 @@
-import { Property, BlogPost } from "@/types";
+import { Property, BlogPost, Project } from "@/types";
 import { formatAED, getPropertyTypeLabel } from "@/lib/utils";
 import type { Metadata } from "next";
 
@@ -203,5 +203,77 @@ export function generateOrganizationJsonLd() {
       "https://www.instagram.com/luxespace",
       "https://www.linkedin.com/company/luxespace"
     ]
+  };
+}
+
+/**
+ * Generates dynamic SEO metadata for project launch dossiers
+ */
+export function generateProjectMetadata(project: Project): Metadata {
+  const title = `${project.seo?.metaTitle || project.title} | Off-Plan Launches | Luxespace`;
+  const description = project.seo?.metaDescription || project.headline || project.description.substring(0, 155);
+  const canonical = project.seo?.canonicalUrl || `https://luxespace.ae/projects/${project.slug}`;
+  const keywords = project.seo?.keywords || project.tags || [
+    project.title,
+    project.developerName || "Dubai Developer",
+    project.location,
+    "Off-plan Dubai",
+    "Pre-launch property Dubai",
+    "Payment plan"
+  ];
+
+  return {
+    title,
+    description,
+    keywords: ["Luxespace Properties", "Dubai Off-Plan", ...keywords],
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: canonical,
+      images: project.coverImage
+        ? [{ url: project.coverImage, width: 1200, height: 630, alt: project.title }]
+        : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: project.coverImage ? [project.coverImage] : [],
+    },
+  };
+}
+
+/**
+ * Generates JSON-LD Structured Data for project dossiers
+ */
+export function generateProjectJsonLd(project: Project) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    name: project.title,
+    headline: project.headline,
+    description: project.description,
+    url: `https://luxespace.ae/projects/${project.slug}`,
+    image: [project.coverImage, ...(project.gallery || [])],
+    offers: {
+      "@type": "AggregateOffer",
+      lowPrice: project.startingPrice,
+      priceCurrency: "AED",
+      offerCount: project.units?.length || 1,
+      availability: "https://schema.org/PreOrder",
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: project.location,
+      addressCountry: "AE",
+    },
+    brand: project.developerName ? {
+      "@type": "Brand",
+      name: project.developerName
+    } : undefined
   };
 }

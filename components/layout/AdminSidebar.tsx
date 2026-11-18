@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Sparkles,
   Home,
   Building2,
   MapPin,
@@ -24,6 +25,7 @@ import { createClient } from "@/lib/supabase";
 
 const SIDEBAR_LINKS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/projects", label: "Projects", icon: Sparkles },
   { href: "/admin/properties", label: "Properties", icon: Home },
   { href: "/admin/developers", label: "Developers", icon: Building2 },
   { href: "/admin/communities", label: "Communities", icon: MapPin },

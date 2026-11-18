@@ -14,6 +14,7 @@ import { useFavourites } from "@/components/properties/FavouritesProvider";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/properties", label: "Properties" },
+  { href: "/projects", label: "Projects" },
   { href: "/buy", label: "Buy" },
   { href: "/rent", label: "Rent" },
   { href: "/investment", label: "Investment" },

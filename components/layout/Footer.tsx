@@ -64,6 +64,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/projects" className="hover:text-luxury-gold transition-colors duration-300">
+                  Off-Plan Projects
+                </Link>
+              </li>
+              <li>
                 <Link href="/buy" className="hover:text-luxury-gold transition-colors duration-300">
                   Buy Property
                 </Link>

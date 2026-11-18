@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase";
-import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber, BlogCategory } from "@/types";
+import { Property, Community, Developer, Agent, BlogPost, Testimonial, Lead, Appointment, FAQItem, AwardItem, PartnerItem, DownloadItem, LifestyleArticle, NewsletterSubscriber, BlogCategory, Project } from "@/types";
 
 // Determine if we have live Supabase credentials configured
 export const isSupabaseConfigured = () => {
@@ -4395,6 +4395,200 @@ const MOCK_TESTIMONIALS: Testimonial[] = [
   { id: "t2", clientName: "Elena Rostova", clientTitle: "Private Family Investor", rating: 5, content: "Secured high-yield assets before public releases. A true private wealth advisory.", isFeatured: true, createdAt: new Date().toISOString() },
 ];
 
+
+const MOCK_PROJECTS: Project[] = [
+  {
+    id: "proj1",
+    title: "Palm Springs by Nakheel",
+    slug: "palm-springs-nakheel-jebel-ali",
+    headline: "Official Prices From AED 3.8M Opposite Palm Jebel Ali",
+    description: "Palm Springs by Nakheel in Jebel Ali: official launch with prices from AED 3.8M, 60/40 payment plan with 10% down, October 2030 completion, amenities, and price per sq ft breakdown.",
+    developerId: "dev1",
+    developerName: "Nakheel",
+    communityId: "comm1",
+    communityName: "Jebel Ali",
+    location: "Jebel Ali, South of Sheikh Zayed Road, Opposite Palm Jebel Ali",
+    propertyType: "Townhouses & Luxury Villas",
+    startingPrice: 3800000,
+    paymentPlanSummary: "60/40 with 10% Down Payment",
+    handoverDate: "October 2030",
+    status: "pre-launch",
+    isFeatured: true,
+    coverImage: "/assets/apartment_render.webp",
+    gallery: [
+      "/assets/apartment_render.webp",
+      "/assets/living_room.webp",
+      "/assets/bedroom.webp",
+      "/assets/kitchen.webp"
+    ],
+    pdfBrochureUrl: "https://assets.luxespace.ae/brochures/nakheel-palm-springs-official-brochure.pdf",
+    pdfBrochureName: "Nakheel_Palm_Springs_Official_Brochure.pdf",
+    pdfBrochureSize: "14.2 MB",
+    units: [
+      {
+        typology: "3BR Townhouse (Mid Unit, G+1)",
+        startingPrice: "AED 3,800,000",
+        buaSqft: 2328.6,
+        plotSqft: 2178.0,
+        pricePerSqftBua: "~1,632"
+      },
+      {
+        typology: "4BR Townhouse (Corner Unit, G+1)",
+        startingPrice: "AED 4,600,000",
+        buaSqft: 2780.0,
+        plotSqft: 2850.0,
+        pricePerSqftBua: "~1,654"
+      },
+      {
+        typology: "4BR Townhouse (G+2 Sky Terrace)",
+        startingPrice: "AED 5,200,000",
+        buaSqft: 3340.0,
+        plotSqft: 3100.0,
+        pricePerSqftBua: "~1,556"
+      },
+      {
+        typology: "4BR Standalone Villa",
+        startingPrice: "AED 7,000,000",
+        buaSqft: 4250.0,
+        plotSqft: 5500.0,
+        pricePerSqftBua: "~1,647"
+      },
+      {
+        typology: "5BR Luxury Villa",
+        startingPrice: "AED 8,900,000",
+        buaSqft: 5420.0,
+        plotSqft: 7200.0,
+        pricePerSqftBua: "~1,642"
+      }
+    ],
+    paymentPlan: [
+      { milestone: "Down Payment on Booking", sharePercentage: "10%", timing: "On Booking" },
+      { milestone: "1st Instalment", sharePercentage: "10%", timing: "April 2027" },
+      { milestone: "2nd Instalment", sharePercentage: "10%", timing: "September 2027" },
+      { milestone: "3rd Instalment", sharePercentage: "10%", timing: "March 2028" },
+      { milestone: "4th Instalment", sharePercentage: "10%", timing: "October 2028" },
+      { milestone: "5th Instalment", sharePercentage: "10%", timing: "April 2029" },
+      { milestone: "Final on Handover", sharePercentage: "40%", timing: "October 2030 (Completion)" }
+    ],
+    driveTimes: [
+      { destination: "Palm Jebel Ali", time: "14 minutes" },
+      { destination: "Al Maktoum International Airport (DWC)", time: "23 minutes" },
+      { destination: "Dubai Marina & JBR", time: "25 minutes" },
+      { destination: "Downtown Dubai & Burj Khalifa", time: "35 minutes" }
+    ],
+    amenities: [
+      "Canyon Park with botanical waterways & trails",
+      "Thousand Palms Country Club with beach-inspired lagoon",
+      "Silver Spur Racquet Club (Tennis, Padel & Squash)",
+      "Dedicated Metro Red Line Station connection",
+      "International curriculum schools & healthcare clinics"
+    ],
+    faqs: [
+      {
+        question: "How much does Palm Springs by Nakheel cost?",
+        answer: "Per Nakheel's official payment plan, three-bedroom townhouses start from AED 3.8 million, four-bedroom townhouses from AED 4.6 million (G+1) and AED 5.2 million (G+2), and luxury standalone villas from AED 7 million to AED 8.9 million."
+      },
+      {
+        question: "What is the payment plan?",
+        answer: "A structured 60/40 plan with a 10% down payment on booking, 50% distributed across instalments through construction from 2027 to 2029, and 40% on handover in October 2030."
+      },
+      {
+        question: "When is the estimated handover?",
+        answer: "Nakheel's official construction completion schedule lists estimated handover for October 2030."
+      },
+      {
+        question: "Where is Palm Springs located?",
+        answer: "In Jebel Ali, south of Sheikh Zayed Road, directly opposite Palm Jebel Ali, with a planned Dubai Metro Red Line extension right at the entrance."
+      }
+    ],
+    content: `Nakheel has released the official brochure and sales materials for **Palm Springs**, an exclusive townhouse and villa community in **Jebel Ali**, opposite **Palm Jebel Ali**. 
+
+Homes start from **AED 3.8 million** for a three-bedroom Aliso townhouse on an attractive **60/40 payment plan with a 10% down payment**, with estimated construction completion in **October 2030**.
+
+## Palm Springs: Key Facts
+
+| Feature | Details |
+| :--- | :--- |
+| **Developer** | Nakheel (Dubai Holding Real Estate) |
+| **Location** | Jebel Ali, south of Sheikh Zayed Road, opposite Palm Jebel Ali |
+| **Master Plan** | 382 hectares with over 30% dedicated open space |
+| **Typologies** | 3 & 4 BR Townhouses, 4 & 5 BR Luxury Villas |
+| **Starting Price** | From AED 3,800,000 |
+| **Payment Plan** | 60/40 (10% Down Payment on booking) |
+| **Handover Date** | Estimated October 2030 |
+
+## Prices, Sizes and Price per Sq Ft
+
+| Typology | Starting Price (AED) | Unit Area (sq ft) | Plot Area (sq ft) | AED / sq ft (BUA) |
+| :--- | :--- | :--- | :--- | :--- |
+| **3BR Townhouse (Mid Unit, G+1)** | From 3,800,000 | 2,328.6 | 2,178.0 | ~1,632 |
+| **4BR Townhouse (Corner Unit, G+1)** | From 4,600,000 | 2,780.0 | 2,850.0 | ~1,654 |
+| **4BR Townhouse (G+2 Sky Terrace)** | From 5,200,000 | 3,340.0 | 3,100.0 | ~1,556 |
+| **4BR Standalone Villa** | From 7,000,000 | 4,250.0 | 5,500.0 | ~1,647 |
+| **5BR Luxury Villa** | From 8,900,000 | 5,420.0 | 7,200.0 | ~1,642 |
+
+## Payment Plan (60/40)
+
+| Milestone | Share (%) | Timing |
+| :--- | :--- | :--- |
+| **Down Payment on Booking** | 10% | On Booking |
+| **1st Instalment** | 10% | April 2027 |
+| **2nd Instalment** | 10% | September 2027 |
+| **3rd Instalment** | 10% | March 2028 |
+| **4th Instalment** | 10% | October 2028 |
+| **5th Instalment** | 10% | April 2029 |
+| **Final on Handover** | 40% | October 2030 (Construction Completion) |
+
+## Location and Drive Times
+
+Palm Springs sits on the inland corridor of Sheikh Zayed Road, directly opposite Palm Jebel Ali, with a planned Dubai Metro Red Line extension right at the entrance.
+
+| Destination | Drive Time |
+| :--- | :--- |
+| **Palm Jebel Ali** | 14 minutes |
+| **Al Maktoum International Airport (DWC)** | 23 minutes |
+| **Dubai Marina & JBR** | 25 minutes |
+| **Downtown Dubai & Burj Khalifa** | 35 minutes |
+
+## Amenities & Master Plan Highlights
+
+Nakheel's master plan is organized around three premier social and leisure destinations:
+- **Canyon Park**: The landscaped heart of the community featuring botanical gardens, continuous running trails, and outdoor adventure play zones.
+- **Thousand Palms Country Club**: Beach-inspired lagoon pool, lap pools, splash pads, licensed clubhouse restaurant, fitness center, and event lawn.
+- **Silver Spur Racquet Club**: Professional tennis and padel courts, wellness club, and shaded leisure pavilion.
+
+## Frequently Asked Questions
+
+<details>
+<summary>How much does Palm Springs by Nakheel cost?</summary>
+Per Nakheel's official payment plan, three-bedroom townhouses start from AED 3.8 million, four-bedroom townhouses from AED 4.6 million (G+1) and AED 5.2 million (G+2), and luxury standalone villas from AED 7 million to AED 8.9 million.
+</details>
+
+<details>
+<summary>What is the payment plan?</summary>
+A structured 60/40 plan with a 10% down payment on booking, further instalments through 2027 to 2029, and 40% on handover in October 2030.
+</details>
+
+<details>
+<summary>When is handover?</summary>
+Nakheel's payment plan lists estimated construction completion in October 2030.
+</details>
+
+<details>
+<summary>Where is Palm Springs located?</summary>
+In Jebel Ali, south of Sheikh Zayed Road, opposite Palm Jebel Ali, with a planned metro station beside the site. Official drive times include 14 minutes to Palm Jebel Ali and 23 minutes to Al Maktoum Airport.
+</details>
+
+> [!NOTE]
+> **Register Your Interest With Luxe Space**
+> Contact our private advisory desk for verified floor plans, unit allocation, and priority booking before public launch.
+`,
+    tags: ["Palm Springs", "Nakheel", "Jebel Ali", "Palm Jebel Ali", "Off-Plan", "Townhouses", "Villas"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
+
 const MOCK_BLOGS: BlogPost[] = [
   { id: "b1", title: "Dubai Q3 Luxury Real Estate Insights", slug: "dubai-q3-luxury-insights", summary: "In-depth HNW capital flows and yield analysis.", content: "Full editorial content...", coverImage: "/assets/apartment_render.webp", authorId: "agent1", isPublished: true, status: "published", tags: ["Market News", "Advisory"], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
 ];
@@ -5016,12 +5210,26 @@ class LocalStorageDB {
     this.initKey("luxespace_partners", MOCK_PARTNERS);
     this.initKey("luxespace_downloads", MOCK_DOWNLOADS);
     this.initKey("luxespace_lifestyle", MOCK_LIFESTYLE);
+    this.initKey("luxespace_projects", MOCK_PROJECTS);
     this.initKey("luxespace_subscribers", ["luxespace.subscriber@gmail.com"]);
     this.initKey("luxespace_settings", { companyName: "Luxespace Properties", email: "luxespace@gmail.com", phone: "+971 50 134 8020" });
   }
 
   get<T>(key: string): T[] {
-    if (typeof window === "undefined") return [];
+    if (typeof window === "undefined") {
+      if (key === "projects") return MOCK_PROJECTS as unknown as T[];
+      if (key === "properties") return MOCK_PROPERTIES as unknown as T[];
+      if (key === "developers") return MOCK_DEVELOPERS as unknown as T[];
+      if (key === "communities") return MOCK_COMMUNITIES as unknown as T[];
+      if (key === "agents") return MOCK_AGENTS as unknown as T[];
+      if (key === "blogs") return MOCK_BLOGS as unknown as T[];
+      if (key === "faqs") return MOCK_FAQS as unknown as T[];
+      if (key === "awards") return MOCK_AWARDS as unknown as T[];
+      if (key === "partners") return MOCK_PARTNERS as unknown as T[];
+      if (key === "downloads") return MOCK_DOWNLOADS as unknown as T[];
+      if (key === "lifestyle") return MOCK_LIFESTYLE as unknown as T[];
+      return [];
+    }
     return JSON.parse(localStorage.getItem("luxespace_" + key) || "[]");
   }
 
@@ -5053,6 +5261,7 @@ function toUUID(id: string): string {
   if (id.startsWith("dev")) return `00000000-0000-0000-0000-${hex}`;
   if (id.startsWith("c")) return `00000000-0000-0000-0001-${hex}`;
   if (id.startsWith("agent")) return `00000000-0000-0000-0002-${hex}`;
+  if (id.startsWith("proj")) return `00000000-0000-0000-0009-${hex}`;
   if (id.startsWith("p")) return `00000000-0000-0000-0003-${hex}`;
   if (id.startsWith("blog") || id.startsWith("b")) return `00000000-0000-0000-0004-${hex}`;
   return `00000000-0000-0000-0009-${hex}`;
@@ -5070,6 +5279,7 @@ function fromUUID(uuid: string): string {
   if (typePart === "0002") return `agent${num}`;
   if (typePart === "0003") return `p${num}`;
   if (typePart === "0004") return `b${num}`;
+  if (typePart === "0009") return `proj${num}`;
   return uuid;
 }
 
@@ -5267,6 +5477,81 @@ function mapDownloadFromDB(d: any): DownloadItem {
     thumbnailUrl: d.thumbnail_url || undefined,
     isFeatured: d.is_featured,
     createdAt: d.created_at
+  };
+}
+
+
+function mapProjectFromDB(p: any): Project {
+  return {
+    id: fromUUID(p.id),
+    title: p.title,
+    slug: p.slug,
+    headline: p.headline || undefined,
+    description: p.description || "",
+    content: p.content || "",
+    developerId: p.developer_id ? fromUUID(p.developer_id) : undefined,
+    developerName: p.developer_name || undefined,
+    communityId: p.community_id ? fromUUID(p.community_id) : undefined,
+    communityName: p.community_name || undefined,
+    location: p.location || "",
+    propertyType: p.property_type || "Townhouses & Villas",
+    startingPrice: Number(p.starting_price) || 0,
+    paymentPlanSummary: p.payment_plan_summary || undefined,
+    handoverDate: p.handover_date || undefined,
+    status: p.status || "pre-launch",
+    isFeatured: p.is_featured ?? false,
+    coverImage: mapPngToWebp(p.cover_image) || "/assets/apartment_render.webp",
+    gallery: p.gallery ? p.gallery.map(mapPngToWebpString) : [],
+    pdfBrochureUrl: p.pdf_brochure_url || undefined,
+    pdfBrochureSize: p.pdf_brochure_size || undefined,
+    pdfBrochureName: p.pdf_brochure_name || undefined,
+    units: p.units || [],
+    paymentPlan: p.payment_plan || [],
+    driveTimes: p.drive_times || [],
+    amenities: p.amenities || [],
+    faqs: p.faqs || [],
+    assignedAgentId: p.assigned_agent_id ? fromUUID(p.assigned_agent_id) : undefined,
+    tags: p.tags || [],
+    seo: p.seo || {},
+    createdAt: p.created_at || new Date().toISOString(),
+    updatedAt: p.updated_at || new Date().toISOString()
+  };
+}
+
+function mapProjectToDB(p: any): any {
+  return {
+    id: toUUID(p.id),
+    title: p.title,
+    slug: p.slug,
+    headline: p.headline || null,
+    description: p.description || "",
+    content: p.content || "",
+    developer_id: p.developerId ? toUUID(p.developerId) : null,
+    developer_name: p.developerName || null,
+    community_id: p.communityId ? toUUID(p.communityId) : null,
+    community_name: p.communityName || null,
+    location: p.location || "",
+    property_type: p.propertyType || "Townhouses & Villas",
+    starting_price: p.startingPrice || 0,
+    payment_plan_summary: p.paymentPlanSummary || null,
+    handover_date: p.handoverDate || null,
+    status: p.status || "pre-launch",
+    is_featured: p.isFeatured ?? false,
+    cover_image: p.coverImage || "/assets/apartment_render.webp",
+    gallery: p.gallery || [],
+    pdf_brochure_url: p.pdfBrochureUrl || null,
+    pdf_brochure_size: p.pdfBrochureSize || null,
+    pdf_brochure_name: p.pdfBrochureName || null,
+    units: p.units || [],
+    payment_plan: p.paymentPlan || [],
+    drive_times: p.driveTimes || [],
+    amenities: p.amenities || [],
+    faqs: p.faqs || [],
+    assigned_agent_id: p.assignedAgentId ? toUUID(p.assignedAgentId) : null,
+    tags: p.tags || [],
+    seo: p.seo || {},
+    created_at: p.createdAt || new Date().toISOString(),
+    updated_at: p.updatedAt || new Date().toISOString()
   };
 }
 
@@ -5473,6 +5758,179 @@ function mapBlogToDB(b: any): any {
 
 // Dynamic Content Provider
 export const db = {
+
+  // Projects CRUD
+  async getProjects(filters?: { status?: string; search?: string }): Promise<Project[]> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      let query = supabase.from("projects").select("*").order("created_at", { ascending: false });
+      if (filters?.status && filters.status !== "all") {
+        query = query.eq("status", filters.status);
+      }
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return (data as any[]).map(mapProjectFromDB);
+      }
+      if (error) console.error("Supabase getProjects error:", error.message);
+    }
+    let list = mockDB.get<Project>("projects");
+    if (!list || list.length === 0) {
+      list = [...MOCK_PROJECTS];
+    }
+    if (filters?.status && filters.status !== "all") {
+      list = list.filter((p) => p.status === filters.status);
+    }
+    if (filters?.search) {
+      const q = filters.search.toLowerCase();
+      list = list.filter((p) =>
+        p.title.toLowerCase().includes(q) ||
+        (p.developerName && p.developerName.toLowerCase().includes(q)) ||
+        (p.location && p.location.toLowerCase().includes(q))
+      );
+    }
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  },
+
+  async getProjectBySlug(slug: string): Promise<Project | null> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("projects").select("*").eq("slug", slug).maybeSingle();
+      if (!error && data) {
+        return mapProjectFromDB(data);
+      }
+      if (error) console.error("Supabase getProjectBySlug error:", error.message);
+    }
+    let list = mockDB.get<Project>("projects");
+    if (!list || list.length === 0) {
+      list = [...MOCK_PROJECTS];
+    }
+    return list.find((p) => p.slug === slug) || null;
+  },
+
+  async createProject(project: Omit<Project, "id" | "createdAt" | "updatedAt">): Promise<Project> {
+    const id = crypto.randomUUID();
+    const newRecord: Project = {
+      ...project,
+      id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbRecord = mapProjectToDB(newRecord);
+      const { error, data } = await supabase.from("projects").insert(dbRecord).select().maybeSingle();
+      if (!error && data) {
+        const created = mapProjectFromDB(data);
+        const list = mockDB.get<Project>("projects");
+        list.unshift(created);
+        mockDB.save("projects", list);
+        return created;
+      }
+      if (error) {
+        console.error("Supabase createProject error:", error.message);
+      }
+    }
+    const list = mockDB.get<Project>("projects");
+    list.unshift(newRecord);
+    mockDB.save("projects", list);
+    return newRecord;
+  },
+
+  async updateProject(id: string, patch: Partial<Project>): Promise<Project> {
+    const updatedAt = new Date().toISOString();
+    let updatedProject: Project | null = null;
+
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const dbId = toUUID(id);
+      const dbPatch: any = {};
+      if (patch.title !== undefined) dbPatch.title = patch.title;
+      if (patch.slug !== undefined) dbPatch.slug = patch.slug;
+      if (patch.headline !== undefined) dbPatch.headline = patch.headline;
+      if (patch.description !== undefined) dbPatch.description = patch.description;
+      if (patch.content !== undefined) dbPatch.content = patch.content;
+      if (patch.developerId !== undefined) dbPatch.developer_id = patch.developerId ? toUUID(patch.developerId) : null;
+      if (patch.developerName !== undefined) dbPatch.developer_name = patch.developerName;
+      if (patch.communityId !== undefined) dbPatch.community_id = patch.communityId ? toUUID(patch.communityId) : null;
+      if (patch.communityName !== undefined) dbPatch.community_name = patch.communityName;
+      if (patch.location !== undefined) dbPatch.location = patch.location;
+      if (patch.propertyType !== undefined) dbPatch.property_type = patch.propertyType;
+      if (patch.startingPrice !== undefined) dbPatch.starting_price = patch.startingPrice;
+      if (patch.paymentPlanSummary !== undefined) dbPatch.payment_plan_summary = patch.paymentPlanSummary;
+      if (patch.handoverDate !== undefined) dbPatch.handover_date = patch.handoverDate;
+      if (patch.status !== undefined) dbPatch.status = patch.status;
+      if (patch.isFeatured !== undefined) dbPatch.is_featured = patch.isFeatured;
+      if (patch.coverImage !== undefined) dbPatch.cover_image = patch.coverImage;
+      if (patch.gallery !== undefined) dbPatch.gallery = patch.gallery;
+      if (patch.pdfBrochureUrl !== undefined) dbPatch.pdf_brochure_url = patch.pdfBrochureUrl;
+      if (patch.pdfBrochureSize !== undefined) dbPatch.pdf_brochure_size = patch.pdfBrochureSize;
+      if (patch.pdfBrochureName !== undefined) dbPatch.pdf_brochure_name = patch.pdfBrochureName;
+      if (patch.units !== undefined) dbPatch.units = patch.units;
+      if (patch.paymentPlan !== undefined) dbPatch.payment_plan = patch.paymentPlan;
+      if (patch.driveTimes !== undefined) dbPatch.drive_times = patch.driveTimes;
+      if (patch.amenities !== undefined) dbPatch.amenities = patch.amenities;
+      if (patch.faqs !== undefined) dbPatch.faqs = patch.faqs;
+      if (patch.assignedAgentId !== undefined) dbPatch.assigned_agent_id = patch.assignedAgentId ? toUUID(patch.assignedAgentId) : null;
+      if (patch.tags !== undefined) dbPatch.tags = patch.tags;
+      if (patch.seo !== undefined) dbPatch.seo = patch.seo;
+      dbPatch.updated_at = updatedAt;
+
+      const { error, data } = await supabase.from("projects").update(dbPatch).eq("id", dbId).select().maybeSingle();
+      if (!error && data) {
+        updatedProject = mapProjectFromDB(data);
+      } else if (error) {
+        console.error("Supabase updateProject error:", error.message);
+      }
+    }
+
+    // Always keep mockDB in sync so both layers are fully aligned
+    const list = mockDB.get<Project>("projects");
+    const idx = list.findIndex((p) => p.id === id || toUUID(p.id) === toUUID(id));
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...patch, updatedAt };
+      mockDB.save("projects", list);
+      return updatedProject || list[idx];
+    }
+
+    if (updatedProject) {
+      return updatedProject;
+    }
+
+    // If not found in mockDB but was updated/created
+    const fallbackProject: Project = {
+      id,
+      title: patch.title || "Project",
+      slug: patch.slug || id,
+      description: patch.description || "",
+      content: patch.content || "",
+      location: patch.location || "",
+      propertyType: patch.propertyType || "Townhouses & Villas",
+      startingPrice: patch.startingPrice || 0,
+      status: patch.status || "pre-launch",
+      coverImage: patch.coverImage || "/assets/villa_render.webp",
+      gallery: patch.gallery || [],
+      createdAt: updatedAt,
+      updatedAt,
+      ...patch
+    };
+    list.unshift(fallbackProject);
+    mockDB.save("projects", list);
+    return fallbackProject;
+  },
+
+  async deleteProject(id: string): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.from("projects").delete().eq("id", toUUID(id));
+      if (error) {
+        console.error("Supabase deleteProject error:", error.message);
+      }
+    }
+    const list = mockDB.get<Project>("projects");
+    mockDB.save("projects", list.filter((p) => p.id !== id && toUUID(p.id) !== toUUID(id)));
+    return true;
+  },
+
   // Properties CRUD
   async getProperties(): Promise<Property[]> {
     if (isSupabaseConfigured()) {
@@ -6798,6 +7256,7 @@ export {
   MOCK_COMMUNITIES,
   MOCK_AGENTS,
   MOCK_PROPERTIES,
+  MOCK_PROJECTS,
   MOCK_BLOGS,
   MOCK_FAQS,
   MOCK_TESTIMONIALS,
